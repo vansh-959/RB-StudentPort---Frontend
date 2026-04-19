@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Events | College Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./output.css">
+</head>
+
+<body class="bg-gray-50">
+
+  <!-- NAVBAR -->
+  <nav class="bg-linear-to-r from-blue-900 via-indigo-800 to-purple-800 text-white px-6 py-4">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+
+      <!-- Logo + Menu Button -->
+      <div class="flex justify-between items-center">
+        <div class="text-xl font-bold">
+          <div class="flex items-center gap-2">
+            <img src="logo.png" alt="Veltrix Logo" class="h-16 w-auto">
+          </div>
+        </div>
+
+        <!-- Hamburger (sirf mobile pe) -->
+        <label for="menu" class="md:hidden cursor-pointer text-2xl ">
+          ☰
+        </label>
+      </div>
+
+      <!-- 🔴 YAHAN LAO (sirf ye line move hui) -->
+      <input type="checkbox" id="menu" class="hidden peer">
+
+      <!-- Menu (SINGLE) -->
+      <ul class="
+        hidden
+        peer-checked:flex
+        flex-col
+        mt-4
+        space-y-2
+
+        md:flex
+        md:flex-row
+        md:mt-0
+        md:space-y-0
+        md:space-x-6
+      ">
+        <li><a href="home.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Home</a></li>
+        <li><a href="notice.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Notice</a></li>
+        <li><a href="pyqs.html" class="text-sm sm:text-base hover:text-yellow-300 transition">PYQs</a></li>
+        <li><a href="events.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Events</a></li>
+        <li><a href="about.html" class="text-sm sm:text-base hover:text-yellow-300 transition">About</a></li>
+        <li><a href="contact.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Contact</a></li>
+      </ul>
+
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-20">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">
+        Campus Life & Events
+      </h1>
+      <p class="text-lg md:text-xl text-indigo-100 max-w-3xl mx-auto">
+        Explore technical, cultural, academic and sports events that shape
+        the vibrant life of our university.
+      </p>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="max-w-6xl mx-auto px-4 py-16">
+
+    <!-- FEATURED EVENT -->
+    
+      
+      <div id="featuredEvent"
+      class="bg-white rounded-2xl shadow-lg p-8 mb-16 border-l-8 border-indigo-600">
+      </div>
+  
+
+    <!-- UPCOMING EVENTS -->
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">
+      Upcoming Events
+    </h2>
+
+    <div id="eventList" class="space-y-6 mb-20"></div>
+
+    <!-- PAST EVENTS -->
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">
+      Past Events
+    </h2>
+    <div id="pastEventList" class="grid md:grid-cols-2 gap-6 mb-20"></div>
+
+    
+
+  </section>
+
+  <script>
+  fetch("http://localhost:8080/events")
+  .then(response => response.json())
+  .then(data => {
+
+    const featuredContainer = document.getElementById("featuredEvent");
+    const eventList = document.getElementById("eventList");
+    const pastEventList = document.getElementById("pastEventList");
+
+    featuredContainer.innerHTML = "";
+    eventList.innerHTML = "";
+    pastEventList.innerHTML = "";
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    // Sort events by date ascending
+    data.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+
+    let featuredAssigned = false;
+
+    data.forEach((event) => {
+
+      const eventDate = new Date(event.eventDate);
+      eventDate.setHours(0,0,0,0);
+
+      const card = `
+        <div class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
+          <h3 class="text-xl font-semibold text-gray-800">
+            ${event.title}
+          </h3>
+          <p class="text-sm text-gray-500 mt-1">
+            📅 ${event.eventDate} • ${event.venue}
+          </p>
+          <p class="text-base text-gray-700 mt-4">
+            ${event.summary}
+          </p>
+          <a href="event-detail.html?id=${event.id}"
+            class="text-indigo-600 font-semibold hover:underline mt-4 inline-block">
+            View Full Details →
+          </a>
+        </div>
+      `;
+
+      if (eventDate >= today && !featuredAssigned) {
+
+       
+        featuredContainer.innerHTML = `
+          <h2 class="text-sm uppercase tracking-wide text-indigo-600 font-semibold mb-2">
+            Featured Event
+          </h2>
+          <h3 class="text-3xl font-bold text-gray-800 mb-2">
+            ${event.title}
+          </h3>
+          <p class="text-gray-500 mb-4">
+            📅 ${event.eventDate} • 📍 ${event.venue}
+          </p>
+          <p class="text-lg text-gray-700 max-w-4xl">
+            ${event.summary}
+          </p>
+          <div class="mt-6">
+            <a href="event-detail.html?id=${event.id}"
+              class="text-indigo-600 font-semibold hover:underline">
+              View Full Details →
+            </a>
+          </div>
+        `;
+
+        featuredAssigned = true;
+
+      } else if (eventDate >= today) {
+
+        eventList.innerHTML += card;
+
+      } else {
+
+        pastEventList.innerHTML += card;
+
+      }
+
+    });
+
+  })
+  .catch(error => {
+    console.error("Error loading events:", error);
+  });
+</script>
+</body>
+
+</html>

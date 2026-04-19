@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | College Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 flex items-center justify-center h-screen font-sans">
+
+    <div class="bg-gray-800 p-10 rounded-3xl shadow-2xl w-96">
+        <h1 class="text-3xl font-extrabold text-center text-purple-500 mb-6">Admin Login</h1>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-gray-300 font-semibold mb-2">Username</label>
+                <input type="text" id="username" placeholder="Enter username" required
+                    class="w-full p-3 rounded-xl bg-gray-900 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+            </div>
+
+            <div>
+                <label class="block text-gray-300 font-semibold mb-2">Password</label>
+                <input type="password" id="password" placeholder="Enter password" required
+                    class="w-full p-3 rounded-xl bg-gray-900 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+            </div>
+
+            <button type="submit"
+                class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-2xl font-bold hover:from-purple-500 hover:to-indigo-500 shadow-lg transition-all hover:-translate-y-1">
+                Login
+            </button>
+
+            <p id="errorMsg" class="text-red-500 text-sm mt-2 hidden text-center">Invalid username or password!</p>
+        </form>
+    </div>
+    
+<script>
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "12345";
+
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+
+    if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
+        localStorage.setItem("adminLoggedIn", "true");
+        window.location.href = "admin_pannel.html";
+    } else {
+        document.getElementById("errorMsg").classList.remove("hidden");
+    }
+});
+</script>
+
+</body>
+
+</html>

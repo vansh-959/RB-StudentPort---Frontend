@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Events Details</title>
+  <link rel="stylesheet" href="./output.css">
+</head>
+
+<body class="bg-gray-50">
+
+<div class="max-w-3xl mx-auto px-4 py-12 bg-white shadow rounded mt-10">
+  <h1 id="title" class="text-2xl font-bold text-gray-800 mb-4"></h1>
+  <p id="summary" class="text-gray-600 text-lg"></p>
+
+  <a href="events.html" class="inline-block mt-6 text-blue-600 hover:underline">
+    ← Back to Events
+  </a>
+</div>
+
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  fetch(`http://localhost:8080/events/${id}`)
+    .then(res => res.json())
+    .then(data => {
+
+      document.getElementById("title").innerText = data.title;
+
+      document.getElementById("summary").innerHTML = `
+        <strong>Date:</strong> ${data.eventDate} <br>
+        <strong>Venue:</strong> ${data.venue} <br><br>
+        ${data.summary}
+      `;
+
+      if (data.filePath) {
+        const fileLink = document.createElement("a");
+        fileLink.href = "http://localhost:8080/uploads/" + data.filePath;
+        fileLink.target = "_blank";
+        fileLink.className = "block mt-6 text-purple-600 font-semibold hover:underline";
+        fileLink.innerText = "View Poster / Document";
+
+        document.querySelector(".max-w-3xl").appendChild(fileLink);
+      }
+
+    })
+    .catch(error => {
+      console.error("Error loading event:", error);
+    });
+</script>
+
+
+</body>
+</html>

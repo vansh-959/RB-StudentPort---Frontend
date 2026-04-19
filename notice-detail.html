@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notice Details</title>
+  <link rel="stylesheet" href="./output.css">
+</head>
+
+<body class="bg-gray-50">
+
+<div class="max-w-3xl mx-auto px-4 py-12 bg-white shadow rounded mt-10">
+  <h1 id="title" class="text-2xl font-bold text-gray-800 mb-4"></h1>
+  <p id="description" class="text-gray-600 text-lg"></p>
+
+  <a href="notice.html" class="inline-block mt-6 text-blue-600 hover:underline">
+    ← Back to Notices
+  </a>
+</div>
+
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  fetch(`http://localhost:8080/notices/${id}`)//sends request to backend
+    .then(res => res.json())//converts json response into js object
+    .then(data => {
+
+      
+      document.getElementById("title").innerText = data.title;
+
+      document.getElementById("description").innerText =
+        "Published on: " + data.publicationDate;
+
+      const pdfLink = document.createElement("a");
+      pdfLink.href = "http://localhost:8080/uploads/" + data.pdfPath;
+      pdfLink.target = "_blank";
+      pdfLink.className = "block mt-6 text-purple-600 font-semibold hover:underline";
+      pdfLink.innerText = "View Notice";
+
+      document.querySelector(".max-w-3xl").appendChild(pdfLink);
+    });
+</script>
+
+
+</body>
+</html>
