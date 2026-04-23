@@ -1,184 +1,116 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./output.css">
-    <title>Documentation</title>
+    <title>Rayat Bahra Portal | Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Sirf Animations add kitian ne, purana logic same hai */
+        @keyframes water-flow { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @keyframes wave1 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        body { background-color: #0f172a; overflow-x: hidden; }
+    </style>
 </head>
-<body>
- <nav class="bg-linear-to-r from-blue-900 via-indigo-800 to-purple-800 text-white px-6 py-4">
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-    
-    <!-- Logo + Menu Button -->
-    <div class="flex justify-between items-center">
-      <div class="text-xl font-bold">
-        <div class="flex items-center gap-2">
-          <img src="logo.png" alt="Veltrix Logo" class="h-16 w-auto">
+<body class="text-slate-200">
+
+    <nav class="bg-indigo-950 border-b border-indigo-900 text-white px-6 py-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between">
+        
+        <div class="flex justify-between items-center w-full md:w-auto">
+            <div class="flex items-center gap-2">
+                <img src="logo.png" alt="Logo" class="h-14 w-auto">
+            </div>
+            
+            <label for="menu" class="md:hidden cursor-pointer p-2 hover:bg-white/10 rounded-lg transition-colors z-[110] relative">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white peer-checked:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </label>
         </div>
-      </div>
 
-      <!-- Hamburger (sirf mobile pe) -->
-      <label for="menu" class="md:hidden cursor-pointer text-2xl ">
-        ☰
-      </label>
+        <input type="checkbox" id="menu" class="hidden peer">
+
+        <ul id="mobile-menu" class="fixed top-0 right-[-100%] h-screen w-[75%] bg-indigo-950 shadow-2xl z-[120] flex flex-col p-8 space-y-6 transition-all duration-500 ease-in-out 
+                   peer-checked:right-0 md:static md:h-auto md:w-auto md:bg-transparent md:shadow-none md:flex-row md:p-0 md:space-y-0 md:space-x-8 md:transition-none md:flex">
+            
+            <li class="md:hidden flex justify-between items-center mb-6 border-b border-indigo-800 pb-4">
+                <span class="font-black text-indigo-400 uppercase tracking-[0.2em] text-xs">Navigation</span>
+                <label for="menu" class="text-2xl cursor-pointer hover:rotate-90 transition-transform p-2">✕</label>
+            </li>
+
+            <li><a href="index.html" class="text-sm font-bold text-indigo-400 border-b-2 border-indigo-400 md:pb-1 inline-block">Home</a></li>
+    <li><a href="notice.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notice</a></li>
+    <li><a href="pyqs.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">PYQs</a></li>
+    <li><a href="notes.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notes</a></li>
+    <li><a href="events.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Events</a></li>
+    <li><a href="about.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">About</a></li>
+    <li><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Contact</a></li>
+        </ul>
+
+        <label for="menu" class="fixed inset-0 bg-black/60 hidden peer-checked:block md:peer-checked:hidden z-[100] backdrop-blur-sm transition-opacity"></label>
     </div>
-
-    <!-- 🔴 YAHAN LAO (sirf ye line move hui) -->
-    <input type="checkbox" id="menu" class="hidden peer">
-
-    <!-- Menu (SINGLE) -->
-    <ul
-      class="
-        hidden
-        peer-checked:flex
-        flex-col
-        mt-4
-        space-y-2
-
-        md:flex
-        md:flex-row
-        md:mt-0
-        md:space-y-0
-        md:space-x-6
-      "
-    >
-      <li><a href="index.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Home</a></li>
-      <li><a href="notice.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Notice</a></li>
-      <li><a href="pyqs.html" class="text-sm sm:text-base hover:text-yellow-300 transition">PYQs</a></li>
-      <li><a href="events.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Events</a></li>
-      <li><a href="about.html" class="text-sm sm:text-base hover:text-yellow-300 transition">About</a></li>
-      <li><a href="contact.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Contact</a></li>
-    </ul>
-
-  </div>
 </nav>
+    <main class="relative min-h-screen flex flex-col items-center px-6 bg-[#0f172a]">
+        <div class="absolute inset-0 opacity-20 pointer-events-none">
+            <div class="absolute -top-20 -left-20 w-[600px] h-[600px] bg-indigo-600 rounded-full blur-[120px] animate-[wave1_25s_linear_infinite]"></div>
+        </div>
 
+        <section class="max-w-4xl mx-auto text-center mt-24 z-10">
+            <h1 class="text-4xl md:text-5xl text-white font-extrabold mb-4">Rayat Bahra Professional University</h1>
+            <p class="text-slate-400 max-w-2xl mx-auto">A student-developed academic portal interface for notices, events, and previous year question papers.</p>
+        </section>
 
+        <div class="mt-10 w-full flex justify-center z-10">
+            <form id="searchForm" class="relative w-full max-w-md group">
+                <input id="searchInput" type="text" placeholder="Search notices, PYQs, and campus events..."
+                    class="w-full pl-12 pr-4 py-3 rounded-full border border-slate-700 bg-slate-900 text-white shadow-lg focus:ring-4 focus:ring-indigo-900 focus:outline-none transition-all" />
+                <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-500">🔍</button>
+            </form>
+        </div>
+    </main>
 
-
-
-
-
-
-
-
-
-
-<main class="relative min-h-screen flex flex-col items-center px-6 overflow-hidden
-         bg-white
-         bg-[length:300%_300%]
-         animate-[softMove_18s_ease-in-out_infinite]">
-         <div class="flex flex-col items-center text-center pt-24"></div>
-
-         <div class="absolute inset-0 opacity-40 pointer-events-none">
-  <div class="absolute -top-20 -left-20 w-[600px] h-[600px] bg-cyan-300 rounded-full blur-3xl
-              animate-[wave1_25s_linear_infinite]"></div>
-
-  <div class="absolute top-40 -right-32 w-[500px] h-[500px] bg-purple-300 rounded-full blur-3xl
-              animate-[wave2_30s_linear_infinite]"></div>
-</div>
-
-<section class="max-w-4xl mx-auto text-center mt-10">
-  <h1 class="text-4xl text-black font-bold mb-4">
-    Rayat Bahra Professional University
-  </h1>
-
-  <p class="text-gray-600">
-    A student-developed academic portal interface for notices, events, and previous year question papers.
-  </p>
-</section>
-
-
-<div class="mt-6 w-full flex justify-center">
-  <div class="relative w-full max-w-md group">
-    
-    <!-- Search Input -->
-    <input
-      type="text"
-      placeholder="Search notices, PYQs, and campus events..."
-      class="
-        w-full
-        pl-12 pr-4 py-3
-        rounded-full
-        border border-indigo-400
-        bg-white
-        shadow-md
-
-        transition-all duration-300 ease-in-out
-        group-hover:shadow-xl
-        group-hover:scale-[1.02]
-
-        focus:outline-none
-        focus:ring-4
-        focus:ring-indigo-300
-        focus:border-indigo-600
-      "
-    />
-
-    <!-- Icon -->
-    <span
-      class="
-        absolute left-4 top-1/2 -translate-y-1/2
-        text-indigo-600
-        transition-transform duration-300
-        group-hover:scale-110
-        group-focus-within:rotate-12
-      "
-    >
-      🔍
-    </span>
-
-  </div>
-</div>
-
-</main>
-
-
-
-
-
-
-
-
-
-
-
-
-
- <div class="fixed bottom-0 left-0 w-full z-50 overflow-hidden bg-white/10 backdrop-blur-sm h-1">
-    
-    <div class="absolute inset-0 w-[200%] flex animate-[water-flow_5s_linear_infinite]">
-        <div class="w-full h-full bg-linear-to-r from-blue-900 via-indigo-600 to-purple-600"></div>
-        <div class="w-full h-full bg-linear-to-r from-blue-900 via-indigo-600 to-purple-600"></div>
-    </div>
-</div>
-
-<div class="fixed bottom-1 left-0 w-full bg-white/95 border-t border-gray-100 py-1 md:py-2 px-4 shadow-lg overflow-hidden flex items-center">
-    <div class="bg-indigo-700 text-white text-[9px] md:text-xs font-bold px-2 py-0.5 rounded mr-3 uppercase">News:</div>
-    <div class="flex-1 overflow-hidden">
-        <div class="inline-block whitespace-nowrap animate-[marquee_20s_linear_infinite] text-[10px] md:text-sm text-indigo-950 font-medium">
-             📅 Mid-term dates are out • 📚 Download previous Sem PYQs • 🚀 New Event: .......
+    <div class="fixed bottom-0 left-0 w-full z-50">
+        <div class="w-full h-1 bg-white/5 overflow-hidden">
+            <div class="w-[200%] h-full flex animate-[water-flow_5s_linear_infinite]">
+                <div class="w-full h-full bg-gradient-to-r from-indigo-900 to-indigo-500"></div>
+            </div>
+        </div>
+        <div class="bg-slate-900/95 border-t border-slate-800 py-2 px-4 flex items-center">
+            <div class="bg-indigo-700 text-white text-[9px] font-bold px-2 py-0.5 rounded mr-3">NEWS:</div>
+            <div class="flex-1 overflow-hidden">
+                <div class="inline-block whitespace-nowrap animate-[marquee_20s_linear_infinite] text-sm text-slate-300">
+                     📅 Mid-term dates are out • 📚 Download previous Sem PYQs • 🚀 New Event: Tech-Quest 2026!
+                </div>
+            </div>
         </div>
     </div>
-</div>
+<script>
+  // 1. Search input element nu fadlo
+  const searchInput = document.getElementById('searchInput');
 
-<style>
-@keyframes water-flow {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-@keyframes marquee {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-}
-</style>
+  // 2. Search perform karan wala function
+  async function performSearch() {
+    // User di likhi hoyi query lao te extra spaces hatao
+    const rawQuery = searchInput.value.trim();
+    
+    // Check karo ki query bahut choti te nahi (at least 2 characters)
+    if (rawQuery.length < 2) return;
 
+    // 🟢 Magic Line: Bina kisi alert ya direct open de, 
+    // eh user nu naye professional results page te bhej degi.
+    // Othe hi saare Notices, Events, te PYQs ekathe dikhan ge.
+    window.location.href = `search-results.html?q=${encodeURIComponent(rawQuery)}`;
+  }
 
-
-
-
-
-
-
+  // 3. Enter key press nu listen karo
+  searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Default form submit nu roko
+      performSearch();    // Search function chalao
+    }
+  });
+</script>
 </body>
 </html>

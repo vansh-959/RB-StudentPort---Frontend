@@ -2,54 +2,192 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Events Details</title>
-  <link rel="stylesheet" href="./output.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Details | Veltrix Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body { background-color: #0f172a; overflow-x: hidden; }
+    .glass-card {
+        background: rgba(30, 41, 59, 0.4);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    @keyframes loading-bar {
+      0% { width: 0%; left: 0%; }
+      50% { width: 100%; left: 0%; }
+      100% { width: 0%; left: 100%; }
+    }
+    .loading-line::after {
+      content: '';
+      position: absolute;
+      height: 2px;
+      background: #6366f1;
+      animation: loading-bar 1.5s infinite ease-in-out;
+    }
+  </style>
 </head>
 
-<body class="bg-gray-50">
+<body class="text-slate-200 font-sans min-h-screen flex flex-col">
 
-<div class="max-w-3xl mx-auto px-4 py-12 bg-white shadow rounded mt-10">
-  <h1 id="title" class="text-2xl font-bold text-gray-800 mb-4"></h1>
-  <p id="summary" class="text-gray-600 text-lg"></p>
+  <nav class="bg-indigo-950 border-b border-indigo-900 text-white px-6 py-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between">
+        
+        <div class="flex justify-between items-center w-full md:w-auto">
+            <div class="flex items-center gap-2">
+                <img src="logo.png" alt="Logo" class="h-14 w-auto">
+            </div>
+            
+            <label for="menu" class="md:hidden cursor-pointer p-2 hover:bg-white/10 rounded-lg transition-colors z-[110] relative">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white peer-checked:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </label>
+        </div>
 
-  <a href="events.html" class="inline-block mt-6 text-blue-600 hover:underline">
-    ← Back to Events
-  </a>
-</div>
+        <input type="checkbox" id="menu" class="hidden peer">
 
+        <ul id="mobile-menu" class="fixed top-0 right-[-100%] h-screen w-[75%] bg-indigo-950 shadow-2xl z-[120] flex flex-col p-8 space-y-6 transition-all duration-500 ease-in-out 
+                   peer-checked:right-0 md:static md:h-auto md:w-auto md:bg-transparent md:shadow-none md:flex-row md:p-0 md:space-y-0 md:space-x-8 md:transition-none md:flex">
+            
+            <li class="md:hidden flex justify-between items-center mb-6 border-b border-indigo-800 pb-4">
+                <span class="font-black text-indigo-400 uppercase tracking-[0.2em] text-xs">Navigation</span>
+                <label for="menu" class="text-2xl cursor-pointer hover:rotate-90 transition-transform p-2">✕</label>
+            </li>
 
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+            <li><a href="index.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Home</a></li>
+            <li><a href="notice.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notice</a></li>
+            <li><a href="pyqs.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">PYQs</a></li>
+            <li><a href="notes.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notes</a></li>
+            <li><a href="events.html" class="text-sm font-bold text-indigo-400 border-b-2 border-indigo-400 md:pb-1 inline-block">Events</a></li>
+            <li><a href="about.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">About</a></li>
+            <li><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Contact</a></li>
+        </ul>
 
-  fetch(`http://localhost:8080/events/${id}`)
-    .then(res => res.json())
-    .then(data => {
+        <label for="menu" class="fixed inset-0 bg-black/60 hidden peer-checked:block md:peer-checked:hidden z-[100] backdrop-blur-sm transition-opacity"></label>
+    </div>
+</nav>
+  <main class="flex-grow flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-      document.getElementById("title").innerText = data.title;
+    <div class="max-w-3xl w-full relative z-10">
+      
+      <div class="flex items-center justify-between mb-8 px-2">
+        <a href="events.html" class="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 transition-all font-bold text-xs uppercase tracking-widest group">
+          <i class="fas fa-chevron-left transform group-hover:-translate-x-1 transition-transform"></i>
+          Back to Events
+        </a>
+        <div class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Ref: #EVT-2026</div>
+      </div>
 
-      document.getElementById("summary").innerHTML = `
-        <strong>Date:</strong> ${data.eventDate} <br>
-        <strong>Venue:</strong> ${data.venue} <br><br>
-        ${data.summary}
-      `;
+      <div class="glass-card rounded-[2.5rem] border border-white/5 overflow-hidden shadow-2xl">
+        
+        <div id="loader" class="relative py-32 flex flex-col items-center">
+          <div class="w-48 h-[2px] bg-slate-800 rounded-full relative overflow-hidden loading-line"></div>
+          <p class="mt-6 text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">Retrieving Metadata</p>
+        </div>
 
-      if (data.filePath) {
-        const fileLink = document.createElement("a");
-        fileLink.href = "http://localhost:8080/uploads/" + data.filePath;
-        fileLink.target = "_blank";
-        fileLink.className = "block mt-6 text-purple-600 font-semibold hover:underline";
-        fileLink.innerText = "View Poster / Document";
+        <div id="content" class="hidden">
+          
+          <div class="bg-indigo-500/10 px-8 py-4 border-b border-white/5 flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Active Event Record</span>
+            </span>
+            <span class="text-[10px] font-bold text-slate-500 uppercase" id="display-id"></span>
+          </div>
 
-        document.querySelector(".max-w-3xl").appendChild(fileLink);
-      }
+          <div class="p-8 md:p-14">
+            <h1 id="title" class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight mb-12"></h1>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+              <div class="p-6 rounded-3xl bg-slate-900/50 border border-white/5">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="p-2.5 bg-indigo-500/10 rounded-xl text-indigo-400">
+                    <i class="far fa-calendar-check text-lg"></i>
+                  </div>
+                  <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Date</span>
+                </div>
+                <p id="event-date" class="text-lg font-bold text-slate-200"></p>
+              </div>
 
-    })
-    .catch(error => {
-      console.error("Error loading event:", error);
-    });
-</script>
+              <div class="p-6 rounded-3xl bg-slate-900/50 border border-white/5">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="p-2.5 bg-purple-500/10 rounded-xl text-purple-400">
+                    <i class="fas fa-location-dot text-lg"></i>
+                  </div>
+                  <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Official Venue</span>
+                </div>
+                <p id="event-venue" class="text-lg font-bold text-slate-200"></p>
+              </div>
+            </div>
 
+            <div class="mb-12">
+                <h3 class="text-[11px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                    <span class="w-6 h-[2px] bg-indigo-500"></span>
+                    Briefing
+                </h3>
+                <p id="summary" class="text-slate-400 text-lg leading-relaxed font-medium"></p>
+            </div>
 
+            <div id="fileContainer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="py-8 text-center">
+    <p class="text-slate-600 text-[10px] font-bold uppercase tracking-widest">
+      &copy; 2026 Veltrix Systems &bull; RB-Professional University
+    </p>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    fetch(`http://localhost:8080/events/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("loader").classList.add("hidden");
+        document.getElementById("content").classList.remove("hidden");
+
+        document.getElementById("title").innerText = data.title;
+        document.getElementById("event-date").innerText = data.eventDate;
+        document.getElementById("event-venue").innerText = data.venue;
+        document.getElementById("summary").innerText = data.summary;
+        document.getElementById("display-id").innerText = "ID: " + data.id;
+
+        if (data.filePath) {
+          const fileLink = document.createElement("a");
+          fileLink.href = "http://localhost:8080/uploads/" + data.filePath;
+          fileLink.target = "_blank";
+          fileLink.className = "flex items-center justify-between w-full px-8 py-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.5rem] transition-all duration-300 group shadow-xl shadow-indigo-900/20";
+          fileLink.innerHTML = `
+            <div class="flex items-center gap-5">
+              <div class="p-3 bg-white/10 rounded-2xl">
+                <i class="fas fa-file-pdf text-xl"></i>
+              </div>
+              <div class="text-left">
+                <p class="text-sm font-black uppercase tracking-widest">Event Brochure / PDF</p>
+                <p class="text-[10px] text-indigo-200 font-bold">CLICK TO DOWNLOAD OFFICIAL ASSETS</p>
+              </div>
+            </div>
+            <i class="fas fa-arrow-right opacity-50 group-hover:opacity-100 group-hover:translate-x-2 transition-all"></i>
+          `;
+          document.getElementById("fileContainer").appendChild(fileLink);
+        }
+      })
+      .catch(error => {
+        document.getElementById("loader").innerHTML = `
+            <div class="text-center py-10">
+                <i class="fas fa-circle-exclamation text-red-500 text-4xl mb-4"></i>
+                <p class="text-slate-400 text-xs font-black uppercase tracking-widest">Sync Failed: Backend Unreachable</p>
+            </div>
+        `;
+      });
+  </script>
 </body>
 </html>

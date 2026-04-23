@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results | Veltrix Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #020617; color: #cbd5e1; }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .animate-in { animation: fadeInUp 0.5s ease-out forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <nav class="bg-indigo-950/50 backdrop-blur-md border-b border-indigo-900/50 text-white px-6 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="text-xl font-black tracking-tighter">VELTRIX</span>
+            </div>
+            <ul class="hidden md:flex space-x-8 text-sm font-medium">
+                <li><a href="index.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Home</a></li>
+    <li><a href="notice.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notice</a></li>
+    <li><a href="pyqs.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">PYQs</a></li>
+    <li><a href="notes.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notes</a></li>
+    <li><a href="events.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Events</a></li>
+    <li><a href="about.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">About</a></li>
+    <li><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 w-full flex-grow">
+        <div class="mb-12">
+            <h1 class="text-4xl font-black text-white mb-2 tracking-tight">Search <span class="text-indigo-500">Intelligence</span></h1>
+            <p id="searchStats" class="text-slate-500 font-bold uppercase tracking-widest text-xs">Initializing Analysis...</p>
+        </div>
+
+        <div id="noteSection" class="hidden mb-16">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-8 h-[2px] bg-green-500"></span>
+                <h2 class="text-lg font-black text-white uppercase tracking-widest">Study Notes</h2>
+            </div>
+            <div id="noteGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <div id="noticeSection" class="hidden mb-16">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-8 h-[2px] bg-indigo-500"></span>
+                <h2 class="text-lg font-black text-white uppercase tracking-widest">Notices & Bulletins</h2>
+            </div>
+            <div id="noticeGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <div id="eventSection" class="hidden mb-16">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-8 h-[2px] bg-purple-500"></span>
+                <h2 class="text-lg font-black text-white uppercase tracking-widest">Event Matches</h2>
+            </div>
+            <div id="eventGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <div id="pyqSection" class="hidden mb-16">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-8 h-[2px] bg-orange-500"></span>
+                <h2 class="text-lg font-black text-white uppercase tracking-widest">Question Repository</h2>
+            </div>
+            <div id="pyqGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <div id="noResults" class="hidden text-center py-32 glass-card rounded-[3rem] animate-in">
+            <i class="fas fa-search-minus text-6xl text-slate-700 mb-6"></i>
+            <p class="text-2xl font-bold text-white mb-2">Zero Matches Found</p>
+            <p class="text-slate-500 text-sm italic">Try searching with different keywords like 'DBMS', 'Internal' or 'CSE'</p>
+        </div>
+    </main>
+
+    <footer class="py-8 text-center border-t border-white/5">
+        <p class="text-slate-600 text-[10px] font-black uppercase tracking-[0.3em]">&copy; 2026 Veltrix Archive System</p>
+    </footer>
+
+    <script>
+        async function loadResults() {
+            const query = new URLSearchParams(window.location.search).get('q');
+            if (!query) {
+                document.getElementById('searchStats').innerText = "No query provided.";
+                return;
+            }
+
+            document.getElementById('searchStats').innerText = `Showing analysis for query: "${query}"`;
+
+            try {
+                // Tuhada current API call
+                const response = await fetch(`http://localhost:8080/api/search/all?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                const notices = data.notices || [];
+                const events = data.events || [];
+                const pyqs = data.pyqs || [];
+                const notes = data.notes || []; // Backend check karo ki eh field aa rahi hai
+
+                if (notices.length === 0 && events.length === 0 && pyqs.length === 0 && notes.length === 0) {
+                    document.getElementById('noResults').classList.remove('hidden');
+                    return;
+                }
+
+                // --- Render Notes ---
+                if (notes.length > 0) {
+                    document.getElementById('noteSection').classList.remove('hidden');
+                    const grid = document.getElementById('noteGrid');
+                    notes.forEach(n => {
+                        grid.innerHTML += `
+                            <div class="glass-card p-6 rounded-2xl border border-white/5 hover:border-green-500/50 transition-all group animate-in">
+                                <h3 class="font-bold text-white mb-2 group-hover:text-green-400 transition-colors uppercase">${n.subjectName}</h3>
+                                <p class="text-xs text-slate-500 mb-4 line-clamp-2">${n.description || 'Verified resource'}</p>
+                                <a href="notes-detail.html?id=${n.id}" class="inline-block text-green-400 text-[10px] font-black uppercase tracking-widest hover:underline">Access Notes →</a>
+                            </div>`;
+                    });
+                }
+
+                // --- Render Notices ---
+                if (notices.length > 0) {
+                    document.getElementById('noticeSection').classList.remove('hidden');
+                    const grid = document.getElementById('noticeGrid');
+                    notices.forEach(n => {
+                        grid.innerHTML += `<div class="glass-card p-6 rounded-2xl border border-white/5 flex justify-between items-center group hover:border-indigo-500/50 transition-all animate-in">
+                            <div><h3 class="font-bold text-white group-hover:text-indigo-400 transition-colors">${n.title}</h3><p class="text-[10px] font-black text-slate-500 uppercase mt-1 tracking-widest">${n.date || 'Archives'}</p></div>
+                            <a href="notice-detail.html?id=${n.id}" class="bg-indigo-600/10 text-indigo-400 p-2 px-4 rounded-lg text-xs font-bold hover:bg-indigo-600 hover:text-white transition-all">View →</a>
+                        </div>`;
+                    });
+                }
+
+                // --- Render Events ---
+                if (events.length > 0) {
+                    document.getElementById('eventSection').classList.remove('hidden');
+                    const grid = document.getElementById('eventGrid');
+                    events.forEach(e => {
+                        grid.innerHTML += `<div class="glass-card p-6 rounded-2xl border border-white/5 flex justify-between items-center group hover:border-purple-500/50 transition-all animate-in">
+                            <div><h3 class="font-bold text-white group-hover:text-purple-400 transition-colors">${e.title}</h3><p class="text-[10px] font-black text-slate-500 uppercase mt-1 tracking-widest">${e.location || 'Campus Main'}</p></div>
+                            <a href="events.html" class="bg-purple-600/10 text-purple-400 p-2 px-4 rounded-lg text-xs font-bold hover:bg-purple-600 hover:text-white transition-all">Detail →</a>
+                        </div>`;
+                    });
+                }
+
+                // --- Render PYQs ---
+                if (pyqs.length > 0) {
+                    document.getElementById('pyqSection').classList.remove('hidden');
+                    const grid = document.getElementById('pyqGrid');
+                    pyqs.forEach(p => {
+                        grid.innerHTML += `
+                            <div class="glass-card rounded-2xl p-6 border border-white/5 hover:border-orange-500/50 transition-all group animate-in">
+                                <h3 class="font-bold text-white mb-2 text-lg group-hover:text-orange-400 transition-colors">${p.subject}</h3>
+                                <div class="flex gap-2 mb-6"><span class="bg-slate-800 text-slate-400 text-[10px] px-2 py-1 rounded font-black uppercase tracking-tighter">${p.branch}</span></div>
+                                <a href="pyqs_detail.html?id=${p.id}" class="block text-center bg-white text-black py-3 rounded-xl text-xs font-black uppercase hover:bg-orange-500 hover:text-white transition-all">Extract Paper</a>
+                            </div>`;
+                    });
+                }
+
+            } catch (err) {
+                 console.error("Fetch Error:", err);
+                 document.getElementById('searchStats').innerText = "Backend connection failed.";
+            }
+        }
+        loadResults();
+    </script>
+</body>
+</html>

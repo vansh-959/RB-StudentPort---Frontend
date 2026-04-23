@@ -2,50 +2,166 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Pyq Details</title>
-  <link rel="stylesheet" href="./output.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper Details | Veltrix</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #0f172a; overflow-x: hidden; }
+    .glass-card {
+        background: rgba(30, 41, 59, 0.4);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .loading-dots:after {
+      content: '.';
+      animation: dots 1.5s steps(5, end) infinite;
+    }
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60% { content: '...'; }
+      80%, 100% { content: ''; }
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
 </head>
 
-<body class="bg-gray-50">
+<body class="text-slate-200 font-sans min-h-screen flex flex-col">
 
-<div class="max-w-3xl mx-auto px-4 py-12 bg-white shadow rounded mt-10">
-  <h1 id="title" class="text-2xl font-bold text-gray-800 mb-4"></h1>
-  <p id="description" class="text-gray-600 text-lg"></p>
+  <nav class="bg-indigo-950 border-b border-indigo-900 text-white px-6 py-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between">
+        
+        <div class="flex justify-between items-center w-full md:w-auto">
+            <div class="flex items-center gap-2">
+                <img src="logo.png" alt="Logo" class="h-14 w-auto">
+            </div>
+            
+            <label for="menu" class="md:hidden cursor-pointer p-2 hover:bg-white/10 rounded-lg transition-colors z-[110] relative">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white peer-checked:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </label>
+        </div>
 
-  <a href="pyqs.html" class="inline-block mt-6 text-blue-600 hover:underline">
-    ← Back to Pyqs
-  </a>
-</div>
+        <input type="checkbox" id="menu" class="hidden peer">
 
+        <ul id="mobile-menu" class="fixed top-0 right-[-100%] h-screen w-[75%] bg-indigo-950 shadow-2xl z-[120] flex flex-col p-8 space-y-6 transition-all duration-500 ease-in-out 
+                   peer-checked:right-0 md:static md:h-auto md:w-auto md:bg-transparent md:shadow-none md:flex-row md:p-0 md:space-y-0 md:space-x-8 md:transition-none md:flex">
+            
+            <li class="md:hidden flex justify-between items-center mb-6 border-b border-indigo-800 pb-4">
+                <span class="font-black text-indigo-400 uppercase tracking-[0.2em] text-xs">Navigation</span>
+                <label for="menu" class="text-2xl cursor-pointer hover:rotate-90 transition-transform p-2">✕</label>
+            </li>
 
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+            <li><a href="index.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Home</a></li>
+            <li><a href="notice.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notice</a></li>
+            <li><a href="pyqs.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">PYQs</a></li>
+            <li><a href="notes.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notes</a></li>
+            <li><a href="events.html" class="text-sm font-bold text-indigo-400 border-b-2 border-indigo-400 md:pb-1 inline-block">Events</a></li>
+            <li><a href="about.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">About</a></li>
+            <li><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Contact</a></li>
+        </ul>
 
-  fetch(`http://localhost:8080/pyqs/${id}`)
-    .then(res => res.json())
-    .then(data => {
+        <label for="menu" class="fixed inset-0 bg-black/60 hidden peer-checked:block md:peer-checked:hidden z-[100] backdrop-blur-sm transition-opacity"></label>
+    </div>
+</nav>
+  <main class="flex-grow flex items-center justify-center p-6 relative overflow-hidden">
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px]"></div>
 
-      document.getElementById("title").innerText = data.subject;
+    <div class="max-w-2xl w-full glass-card rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative z-10">
+      
+      <div class="h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
 
-      document.getElementById("description").innerHTML = `
-        <b>Stream:</b> ${data.stream}<br>
-        <b>Branch:</b> ${data.branch}<br>
-        <b>Semester:</b> ${data.semester}<br>
-        <b>Year:</b> ${data.year}
-      `;
+      <div class="p-8 md:p-12">
+        <div id="loader" class="flex flex-col items-center justify-center py-12">
+          <div class="relative">
+            <div class="h-14 w-14 rounded-full border-t-2 border-b-2 border-indigo-500 animate-spin"></div>
+          </div>
+          <p class="mt-6 text-slate-400 font-bold text-sm tracking-widest uppercase">
+            Fetching Document<span class="loading-dots"></span>
+          </p>
+        </div>
 
-      const pdfLink = document.createElement("a");
-      pdfLink.href = "http://localhost:8080/uploads/pyqs/" + data.fileName;
-      pdfLink.target = "_blank";
-      pdfLink.className = "block mt-6 text-purple-600 font-semibold hover:underline";
-      pdfLink.innerText = "View Question Paper";
+        <div id="content" class="hidden animate-[fadeIn_0.5s_ease-in-out]">
+          <div class="mb-8 text-center">
+            <h1 id="title" class="text-3xl md:text-4xl font-black text-white leading-tight mb-2"></h1>
+            <p class="text-indigo-400 font-bold text-xs uppercase tracking-[0.3em]">Official Question Paper</p>
+          </div>
 
-      document.querySelector(".max-w-3xl").appendChild(pdfLink);
-    })
-    .catch(error => console.error("Error:", error));
-</script>
+          <div class="grid grid-cols-2 gap-4 mb-10">
+              <div class="bg-slate-900/50 p-4 rounded-2xl border border-white/5">
+                  <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Stream</p>
+                  <p id="stream" class="text-slate-200 font-bold text-sm"></p>
+              </div>
+              <div class="bg-slate-900/50 p-4 rounded-2xl border border-white/5">
+                  <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Branch</p>
+                  <p id="branch" class="text-slate-200 font-bold text-sm"></p>
+              </div>
+              <div class="bg-slate-900/50 p-4 rounded-2xl border border-white/5">
+                  <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Semester</p>
+                  <p id="semester" class="text-slate-200 font-bold text-sm"></p>
+              </div>
+              <div class="bg-slate-900/50 p-4 rounded-2xl border border-white/5">
+                  <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Session/Year</p>
+                  <p id="year" class="text-slate-200 font-bold text-sm"></p>
+              </div>
+          </div>
 
+          <div id="actionArea">
+              </div>
+        </div>
+
+        <div class="mt-10 pt-6 border-t border-white/5 flex justify-center">
+          <a href="pyqs.html" class="flex items-center text-slate-500 hover:text-indigo-400 font-bold text-xs uppercase tracking-widest transition-all group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Catalog
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    fetch(`http://localhost:8080/pyqs/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("loader").classList.add("hidden");
+        document.getElementById("content").classList.remove("hidden");
+
+        document.getElementById("title").innerText = data.subject || data.title;
+        document.getElementById("stream").innerText = data.stream;
+        document.getElementById("branch").innerText = data.branch;
+        document.getElementById("semester").innerText = "Semester " + data.semester;
+        document.getElementById("year").innerText = data.year;
+
+        const pdfLink = document.createElement("a");
+        pdfLink.href = "http://localhost:8080/uploads/pyqs/" + data.fileName;
+        pdfLink.target = "_blank";
+        pdfLink.className = "w-full flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 px-6 rounded-2xl shadow-xl shadow-indigo-600/20 transition-all transform hover:-translate-y-1 active:scale-95 uppercase text-sm tracking-widest";
+        pdfLink.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          Access Full Document
+        `;
+
+        document.getElementById("actionArea").appendChild(pdfLink);
+      })
+      .catch(error => {
+        document.getElementById("loader").innerHTML = `
+          <div class="text-center">
+            <p class="text-red-400 font-black uppercase text-xs tracking-widest">Connection Error</p>
+            <p class="text-slate-500 mt-2 text-sm">Could not reach the server.</p>
+          </div>
+        `;
+      });
+  </script>
 
 </body>
 </html>

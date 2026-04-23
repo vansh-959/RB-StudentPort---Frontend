@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Detail | Veltrix</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #020617; color: #cbd5e1; }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <div id="loading" class="text-center py-20 text-indigo-400 font-bold uppercase tracking-widest animate-pulse">
+            Analyzing Resource...
+        </div>
+
+        <div id="content" class="hidden animate-[fadeIn_0.5s_ease-out]">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                
+                <div class="lg:col-span-8">
+                    <div class="glass-card rounded-[2.5rem] p-8 md:p-12 border border-indigo-500/10">
+                        <div class="flex gap-3 mb-6">
+                            <span id="note-branch" class="bg-indigo-500/10 text-indigo-400 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest border border-indigo-500/20"></span>
+                            <span id="note-sem" class="bg-slate-800 text-slate-400 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest"></span>
+                        </div>
+                        
+                        <h1 id="note-title" class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter leading-none"></h1>
+                        <p id="note-desc" class="text-slate-400 text-lg leading-relaxed mb-10 italic"></p>
+                        
+                        <div class="p-6 bg-slate-900/50 rounded-2xl border border-white/5 flex items-center justify-center">
+                            <i class="far fa-file-pdf text-5xl text-slate-700"></i>
+                            <span class="ml-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Secure PDF Asset Locked</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4">
+                    <div class="glass-card rounded-[2rem] p-6 border border-white/5 sticky top-28">
+                        <h3 class="text-xs font-black text-white uppercase mb-8 tracking-widest border-b border-white/5 pb-4">Metadata Analysis</h3>
+                        <div class="space-y-4 mb-10">
+                            <div class="flex justify-between"><span class="text-[10px] font-bold text-slate-500 uppercase">Year</span><span id="note-year" class="text-xs font-black text-white"></span></div>
+                            <div class="flex justify-between"><span class="text-[10px] font-bold text-slate-500 uppercase">Stream</span><span id="note-stream" class="text-xs font-black text-white"></span></div>
+                        </div>
+
+                        <a id="download-btn" href="#" class="block w-full bg-white text-black text-center py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition-all shadow-xl shadow-indigo-500/10">
+                            Download Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function loadDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id'); // URL ton ID chakki
+
+            if (!id) {
+                window.location.href = 'notes.html';
+                return;
+            }
+
+            try {
+                // 🟢 EH RAHI OH LINE: Backend ton data mangwana
+                const response = await fetch(`http://localhost:8080/api/notes/${id}`);
+                const note = await response.json();
+
+                // 2. Data fill karna (Mapping as per your Controller)
+                document.getElementById('note-title').innerText = note.subjectName;
+                document.getElementById('note-desc').innerText = note.description;
+                document.getElementById('note-branch').innerText = note.branch;
+                document.getElementById('note-sem').innerText = `Semester ${note.semester}`;
+                document.getElementById('note-year').innerText = note.year;
+                document.getElementById('note-stream').innerText = note.stream;
+
+                // Download link (Assuming files are in /uploads/notes/)
+                document.getElementById('download-btn').href = `http://localhost:8080/uploads/notes/${note.filePath}`;
+
+                // Show Content, Hide Loading
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('content').classList.remove('hidden');
+
+            } catch (err) {
+                console.error("Data fetch error:", err);
+                document.getElementById('loading').innerText = "System Error: Asset Not Found";
+            }
+        }
+
+        loadDetails();
+    </script>
+</body>
+</html>

@@ -1,176 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./output.css">
-  <title>Documentation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Student Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; overflow-x: hidden; }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        @keyframes wave1 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
 </head>
+<body class="text-slate-200 font-sans">
 
-<body>
-  <nav class="bg-linear-to-r from-blue-900 via-indigo-800 to-purple-800 text-white px-6 py-4">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-
-      <!-- Logo + Menu Button -->
-      <div class="flex justify-between items-center">
-        <div class="text-xl font-bold">
-          <div class="flex items-center gap-2">
-            <img src="logo.png" alt="Veltrix Logo" class="h-16 w-auto">
-          </div>
+    <nav class="bg-indigo-950 border-b border-indigo-900 text-white px-6 py-4 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between">
+        
+        <div class="flex justify-between items-center w-full md:w-auto">
+            <div class="flex items-center gap-2">
+                <img src="logo.png" alt="Logo" class="h-14 w-auto">
+            </div>
+            
+            <label for="menu" class="md:hidden cursor-pointer p-2 hover:bg-white/10 rounded-lg transition-colors z-[110] relative">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white peer-checked:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </label>
         </div>
 
-        <!-- Hamburger (sirf mobile pe) -->
-        <label for="menu" class="md:hidden cursor-pointer text-2xl ">
-          ☰
-        </label>
-      </div>
+        <input type="checkbox" id="menu" class="hidden peer">
 
-      <!-- 🔴 YAHAN LAO (sirf ye line move hui) -->
-      <input type="checkbox" id="menu" class="hidden peer">
+        <ul id="mobile-menu" class="fixed top-0 right-[-100%] h-screen w-[75%] bg-indigo-950 shadow-2xl z-[120] flex flex-col p-8 space-y-6 transition-all duration-500 ease-in-out 
+                   peer-checked:right-0 md:static md:h-auto md:w-auto md:bg-transparent md:shadow-none md:flex-row md:p-0 md:space-y-0 md:space-x-8 md:transition-none md:flex">
+            
+            <li class="md:hidden flex justify-between items-center mb-6 border-b border-indigo-800 pb-4">
+                <span class="font-black text-indigo-400 uppercase tracking-[0.2em] text-xs">Navigation</span>
+                <label for="menu" class="text-2xl cursor-pointer hover:rotate-90 transition-transform p-2">✕</label>
+            </li>
 
-      <!-- Menu (SINGLE) -->
-      <ul class="
-        hidden
-        peer-checked:flex
-        flex-col
-        mt-4
-        space-y-2
+           <ul class="fixed top-0 right-[-100%] h-screen w-[70%] bg-indigo-950 z-[100] flex flex-col p-8 space-y-6 transition-all duration-500 peer-checked:right-0 md:static md:h-auto md:w-auto md:bg-transparent md:flex-row md:p-0 md:space-y-0 md:space-x-8 md:flex">
+    <li><a href="index.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Home</a></li>
+    <li><a href="notice.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notice</a></li>
+    <li><a href="pyqs.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">PYQs</a></li>
+    <li><a href="notes.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notes</a></li>
+    <li><a href="events.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Events</a></li>
+    <li><a href="about.html" class="text-sm font-bold text-indigo-400 border-b-2 border-indigo-400 md:pb-1 inline-block">About</a></li>
+    <li><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Contact</a></li>
+</ul>
+        </ul>
 
-        md:flex
-        md:flex-row
-        md:mt-0
-        md:space-y-0
-        md:space-x-6
-      ">
-        <li><a href="index.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Home</a></li>
-        <li><a href="notice.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Notice</a></li>
-        <li><a href="pyqs.html" class="text-sm sm:text-base hover:text-yellow-300 transition">PYQs</a></li>
-        <li><a href="events.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Events</a></li>
-        <li><a href="about.html" class="text-sm sm:text-base hover:text-yellow-300 transition">About</a></li>
-        <li><a href="contact.html" class="text-sm sm:text-base hover:text-yellow-300 transition">Contact</a></li>
-      </ul>
-
+        <label for="menu" class="fixed inset-0 bg-black/60 hidden peer-checked:block md:peer-checked:hidden z-[100] backdrop-blur-sm transition-opacity"></label>
     </div>
-  </nav>
+</nav>
+    <main class="relative min-h-screen py-16 px-4 bg-[#0f172a]">
+        
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <div class="absolute top-20 left-10 w-[500px] h-[500px] bg-indigo-600 rounded-full blur-[120px] animate-[wave1_20s_linear_infinite]"></div>
+            <div class="absolute bottom-20 right-10 w-[500px] h-[500px] bg-purple-600 rounded-full blur-[120px]"></div>
+        </div>
 
+        <div class="max-w-4xl mx-auto z-10 relative">
+            <div class="glass-card rounded-3xl p-8 md:p-12 shadow-2xl border border-slate-800">
+                
+                <h1 class="text-3xl md:text-5xl font-black text-white mb-8 border-l-4 border-indigo-500 pl-6 leading-tight">
+                    About This <span class="text-indigo-500">Platform</span>
+                </h1>
 
+                <p class="text-slate-400 text-lg leading-relaxed mb-10">
+                    This platform is a student-developed academic information portal created to simplify access to essential college-related information. It provides a centralized space where students can easily find academic notices, campus events, and previous year question papers.
+                </p>
 
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full"></span> Our Mission
+                        </h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            To support students by providing timely and accurate academic information in one place, helping them stay focused on their academic journey.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-indigo-500 rounded-full"></span> What We Offer
+                        </h3>
+                        <ul class="text-slate-400 text-sm space-y-2">
+                            <li>• Centralized academic notices</li>
+                            <li>• Sem-wise PYQs collection</li>
+                            <li>• Technical & Cultural events</li>
+                            <li>• Clean & Responsive UI</li>
+                        </ul>
+                    </div>
+                </div>
 
+                <div class="mt-16 pt-10 border-t border-slate-800">
+                    <h3 class="text-sm font-black text-indigo-400 uppercase tracking-[0.3em] mb-6">Development Team</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="p-6 bg-slate-900/50 rounded-2xl border border-slate-800">
+                            <p class="text-xs text-slate-500 uppercase font-bold mb-1">Frontend Developer</p>
+                            <p class="text-xl font-bold text-white">Vanshdeep Singh</p>
+                        </div>
+                        <div class="p-6 bg-slate-900/50 rounded-2xl border border-slate-800">
+                            <p class="text-xs text-slate-500 uppercase font-bold mb-1">Backend Developer</p>
+                            <p class="text-xl font-bold text-white">Khushali Jain</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="mt-12 p-8 bg-red-500/5 border border-red-500/10 rounded-2xl">
+                <h4 class="text-red-400 font-bold mb-3 flex items-center gap-2 uppercase tracking-widest text-xs">
+                    ⚠ Disclaimer
+                </h4>
+                <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                    This website is <strong>NOT an official website</strong> of Rayat Bahra Professional University. It is a student-developed project for educational and demonstration purposes only. No money was paid to any third party for its creation.
+                </p>
+                <p class="text-[10px] text-slate-600 uppercase tracking-widest">Strictly for educational use only.</p>
+            </div>
+        </div>
+    </main>
 
-  <!-- About Section -->
-  <section class="py-10 sm:py-14 md:py-16 px-4">
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-sm p-5 sm:p-8 md:p-10">
+    <footer class="bg-indigo-950/50 border-t border-slate-800 py-8 text-center mt-10">
+        <p class="text-slate-500 text-xs tracking-widest uppercase">© 2026 Veltrix Portal • All rights reserved</p>
+    </footer>
 
-      <h2 class="text-2xl sm:text-3xl font-bold mb-5">
-        About This Platform
-      </h2>
-      <p class="text-sm sm:text-base leading-relaxed mb-8">
-        This platform is a student-developed academic information portal created
-        to simplify access to essential college-related information. It provides
-        a centralized space where students can easily find academic notices,
-        campus events, and previous year question papers without relying on
-        multiple or unreliable sources.
-      </p>
-
-      <h3 class="text-xl sm:text-2xl font-semibold mb-3">
-        Our Mission
-      </h3>
-      <p class="text-sm sm:text-base leading-relaxed mb-8">
-        Our mission is to support students by providing timely and accurate
-        academic information in one place. This platform helps students stay
-        informed and focused on their academic journey.
-      </p>
-
-      <h3 class="text-xl sm:text-2xl font-semibold mb-3">
-        What This Platform Offers
-      </h3>
-      <ul class="list-disc list-inside text-sm sm:text-base space-y-2 mb-8">
-        <li>Centralized access to college notices and announcements</li>
-        <li>Previous year question papers for exam preparation</li>
-        <li>Academic, technical, and cultural event updates</li>
-        <li>Mobile-friendly and responsive interface</li>
-        <li>Student-focused simple navigation</li>
-      </ul>
-
-      <h3 class="text-xl sm:text-2xl font-semibold mb-3">
-        Why This Platform Was Created
-      </h3>
-      <p class="text-sm sm:text-base leading-relaxed mb-8">
-        Important information is often scattered across notice boards and
-        messaging platforms. This portal brings all essential updates together
-        in one reliable and accessible place.
-      </p>
-
-      <h3 class="text-xl sm:text-2xl font-semibold mb-3">
-        Future Vision
-      </h3>
-      <p class="text-sm sm:text-base leading-relaxed mb-8">
-        This platform is designed to grow. Future improvements may include
-        advanced search, better organization, and admin-managed content.
-      </p>
-
-      <h3 class="text-xl sm:text-2xl font-semibold mb-3">
-        Our Commitment
-      </h3>
-      <p class="text-sm sm:text-base leading-relaxed">
-        We are committed to simplicity, clarity, and responsible use of
-        technology to improve the academic experience of students.
-      </p>
-
-    </div>
-  </section>
-
-  <!-- Disclaimer Section -->
-  <section class="px-4 pb-10">
-    <div
-      class="max-w-4xl mx-auto bg-gray-50 border border-gray-200 rounded-lg p-5 sm:p-7 text-sm sm:text-base text-gray-700">
-
-      <h3 class="text-lg sm:text-xl font-semibold mb-3 text-gray-800">
-        Disclaimer
-      </h3>
-
-      <p class="leading-relaxed mb-3">
-        This website is <strong>NOT an official website</strong> of Rayat Bahra Professional University.
-        It is a <strong>student-developed project</strong> created solely for academic,
-        learning, and demonstration purposes.
-      </p>
-
-      <p class="leading-relaxed mb-3">
-        This platform has <strong>not been developed by any company</strong> and
-        <strong>no money has been paid</strong> to any organization or third party
-        for its creation.
-      </p>
-
-      <p class="leading-relaxed mb-3">
-        The content and design of this website are independently created by students
-        and are <strong>not affiliated with, endorsed by, or officially connected</strong>
-        to Rayat Bahra Professional University.
-      </p>
-
-      <p class="leading-relaxed mb-3">
-        <strong>Backend Development:</strong> Khushali Jain
-        <strong>Frontend Development:</strong> Vanshdeep Singh
-      </p>
-
-      <p class="text-xs sm:text-sm text-gray-500 mt-4">
-        This project is intended strictly for educational use.
-      </p>
-
-    </div>
-  </section>
-
-  <!-- Footer -->
-   <br>
-   <br>
-  <footer class="bg-white border-t">
-    <div class="max-w-6xl mx-auto px-4 py-6 text-center text-xs sm:text-sm text-gray-600">
-      © 2026 College Portal. All rights reserved.
-    </div>
-  </footer>
-  <br>
-  <br>
-  <br>
 </body>
-
 </html>
