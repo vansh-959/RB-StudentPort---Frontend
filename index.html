@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -5,67 +6,66 @@
     <title>Rayat Bahra Portal | Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Sirf Animations add kitian ne, purana logic same hai */
+        /* Animations same rakhiya ne */
         @keyframes water-flow { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         @keyframes wave1 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        
+
         body { background-color: #0f172a; overflow-x: hidden; }
     </style>
 </head>
 <body class="text-slate-200">
 
-    <nav class="bg-indigo-950 border-b border-indigo-900 text-white px-6 py-4 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between">
-        
-        <div class="flex justify-between items-center w-full md:w-auto">
-            <div class="flex items-center gap-2">
-                <img src="logo.png" alt="Logo" class="h-14 w-auto">
+    <nav class="bg-indigo-950 border-b border-indigo-900 text-white px-4 md:px-6 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="logo.png" alt="Logo" class="h-10 md:h-14 w-auto object-contain">
+                <span class="font-bold text-sm md:text-xl tracking-tight">RB-STUDENTPORT</span>
             </div>
-            
+
             <label for="menu" class="md:hidden cursor-pointer p-2 hover:bg-white/10 rounded-lg transition-colors z-[110] relative">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white peer-checked:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                 </svg>
             </label>
+
+            <input type="checkbox" id="menu" class="hidden peer">
+
+            <ul id="mobile-menu" class="fixed top-0 right-[-100%] h-screen w-[75%] bg-indigo-950 shadow-2xl z-[120] flex flex-col p-8 space-y-6 transition-all duration-500 ease-in-out peer-checked:right-0 md:static md:h-auto md:w-auto md:bg-transparent md:shadow-none md:flex-row md:p-0 md:space-y-0 md:space-x-8 md:transition-none md:flex">
+                <li class="md:hidden flex justify-between items-center mb-6 border-b border-indigo-800 pb-4">
+                    <span class="font-black text-indigo-400 uppercase tracking-widest text-xs">Navigation</span>
+                    <label for="menu" class="text-2xl cursor-pointer p-2">✕</label>
+                </li>
+                <li><a href="index.html" class="text-sm font-bold text-indigo-400 border-b-2 border-indigo-400 md:pb-1 inline-block">Home</a></li>
+                <li><a href="notice.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notice</a></li>
+                <li><a href="pyqs.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">PYQs</a></li>
+                <li><a href="notes.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notes</a></li>
+                <li><a href="events.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Events</a></li>
+                <li><a href="about.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">About</a></li>
+                <li><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Contact</a></li>
+            </ul>
+
+            <label for="menu" class="fixed inset-0 bg-black/60 hidden peer-checked:block md:peer-checked:hidden z-[100] backdrop-blur-sm transition-opacity"></label>
         </div>
+    </nav>
 
-        <input type="checkbox" id="menu" class="hidden peer">
-
-        <ul id="mobile-menu" class="fixed top-0 right-[-100%] h-screen w-[75%] bg-indigo-950 shadow-2xl z-[120] flex flex-col p-8 space-y-6 transition-all duration-500 ease-in-out 
-                   peer-checked:right-0 md:static md:h-auto md:w-auto md:bg-transparent md:shadow-none md:flex-row md:p-0 md:space-y-0 md:space-x-8 md:transition-none md:flex">
-            
-            <li class="md:hidden flex justify-between items-center mb-6 border-b border-indigo-800 pb-4">
-                <span class="font-black text-indigo-400 uppercase tracking-[0.2em] text-xs">Navigation</span>
-                <label for="menu" class="text-2xl cursor-pointer hover:rotate-90 transition-transform p-2">✕</label>
-            </li>
-
-            <li><a href="index.html" class="text-sm font-bold text-indigo-400 border-b-2 border-indigo-400 md:pb-1 inline-block">Home</a></li>
-    <li><a href="notice.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notice</a></li>
-    <li><a href="pyqs.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">PYQs</a></li>
-    <li><a href="notes.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notes</a></li>
-    <li><a href="events.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Events</a></li>
-    <li><a href="about.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">About</a></li>
-    <li><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Contact</a></li>
-        </ul>
-
-        <label for="menu" class="fixed inset-0 bg-black/60 hidden peer-checked:block md:peer-checked:hidden z-[100] backdrop-blur-sm transition-opacity"></label>
-    </div>
-</nav>
     <main class="relative min-h-screen flex flex-col items-center px-6 bg-[#0f172a]">
         <div class="absolute inset-0 opacity-20 pointer-events-none">
             <div class="absolute -top-20 -left-20 w-[600px] h-[600px] bg-indigo-600 rounded-full blur-[120px] animate-[wave1_25s_linear_infinite]"></div>
         </div>
 
-        <section class="max-w-4xl mx-auto text-center mt-24 z-10">
-            <h1 class="text-4xl md:text-5xl text-white font-extrabold mb-4">Rayat Bahra Professional University</h1>
-            <p class="text-slate-400 max-w-2xl mx-auto">A student-developed academic portal interface for notices, events, and previous year question papers.</p>
+        <section class="max-w-4xl mx-auto text-center mt-16 md:mt-24 z-10">
+            <h1 class="text-3xl md:text-5xl text-white font-extrabold mb-4 leading-tight">
+                Rayat Bahra <br class="md:hidden"> Professional University
+            </h1>
+            <p class="text-slate-400 text-sm md:text-base max-w-2xl mx-auto px-4">
+                A student-developed academic portal interface for notices, events, and previous year question papers.
+            </p>
         </section>
 
-        <div class="mt-10 w-full flex justify-center z-10">
+        <div class="mt-10 w-full flex justify-center z-10 px-2">
             <form id="searchForm" class="relative w-full max-w-md group">
-                <input id="searchInput" type="text" placeholder="Search notices, PYQs, and campus events..."
-                    class="w-full pl-12 pr-4 py-3 rounded-full border border-slate-700 bg-slate-900 text-white shadow-lg focus:ring-4 focus:ring-indigo-900 focus:outline-none transition-all" />
+                <input id="searchInput" type="text" placeholder="Search notices, PYQs..." class="w-full pl-12 pr-4 py-4 rounded-full border border-slate-700 bg-slate-900 text-white shadow-lg focus:ring-4 focus:ring-indigo-900 focus:outline-none transition-all text-sm md:text-base" />
                 <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-500">🔍</button>
             </form>
         </div>
@@ -77,40 +77,29 @@
                 <div class="w-full h-full bg-gradient-to-r from-indigo-900 to-indigo-500"></div>
             </div>
         </div>
-        <div class="bg-slate-900/95 border-t border-slate-800 py-2 px-4 flex items-center">
+        <div class="bg-slate-900/95 border-t border-slate-800 py-3 px-4 flex items-center">
             <div class="bg-indigo-700 text-white text-[9px] font-bold px-2 py-0.5 rounded mr-3">NEWS:</div>
             <div class="flex-1 overflow-hidden">
                 <div class="inline-block whitespace-nowrap animate-[marquee_20s_linear_infinite] text-sm text-slate-300">
-                     📅 Mid-term dates are out • 📚 Download previous Sem PYQs • 🚀 New Event: Tech-Quest 2026!
+                    📅 Mid-term dates are out • 📚 Download previous Sem PYQs • 🚀 New Event: Tech-Quest 2026!
                 </div>
             </div>
         </div>
     </div>
-<script>
-  // 1. Search input element nu fadlo
-  const searchInput = document.getElementById('searchInput');
 
-  // 2. Search perform karan wala function
-  async function performSearch() {
-    // User di likhi hoyi query lao te extra spaces hatao
-    const rawQuery = searchInput.value.trim();
-    
-    // Check karo ki query bahut choti te nahi (at least 2 characters)
-    if (rawQuery.length < 2) return;
-
-    // 🟢 Magic Line: Bina kisi alert ya direct open de, 
-    // eh user nu naye professional results page te bhej degi.
-    // Othe hi saare Notices, Events, te PYQs ekathe dikhan ge.
-    window.location.href = `search-results.html?q=${encodeURIComponent(rawQuery)}`;
-  }
-
-  // 3. Enter key press nu listen karo
-  searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault(); // Default form submit nu roko
-      performSearch();    // Search function chalao
-    }
-  });
-</script>
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        async function performSearch() {
+            const rawQuery = searchInput.value.trim();
+            if (rawQuery.length < 2) return;
+            window.location.href = `search-results.html?q=${encodeURIComponent(rawQuery)}`;
+        }
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+    </script>
 </body>
 </html>
