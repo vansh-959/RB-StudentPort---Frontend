@@ -250,7 +250,7 @@
 
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-gray-300 ml-1">2. Select Branch</label>
-                                <select name="branch" id="notes-course-select" required disabled
+                                <select name="branch" id="notes-course-select" required disabled onchange="updateNotesSemester()"
                                     class="w-full bg-gray-900 border border-gray-700 rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 outline-none text-white disabled:opacity-50">
                                     <option value="">First select a stream...</option>
                                 </select>
@@ -262,7 +262,7 @@
                             <div class="space-y-2">
                                 <label
                                     class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Semester</label>
-                                <select name="semester"
+                                <select id="notes-semester-select" name="semester"
                                     class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white">
                                     <option value="1">Semester 1</option>
                                     <option value="2">Semester 2</option>
@@ -277,8 +277,16 @@
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Session
                                     Year</label>
-                                <input type="number" name="year" placeholder="2026" required
+                                <select name="year" required
                                     class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white">
+                                    <option value="">Select Year</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                </select>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Subject
@@ -360,7 +368,7 @@
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-gray-300 ml-1">2. Select Course /
                                     Branch</label>
-                                <select id="course-select" name="branch" required disabled
+                                <select id="course-select" name="branch" required disabled onchange="updatePyqSemester()"
                                     class="w-full bg-gray-900 border border-gray-700 rounded-xl p-4 focus:ring-2 focus:ring-blue-500 outline-none text-white disabled:opacity-50">
                                     <option value="">First select a stream...</option>
                                 </select>
@@ -372,7 +380,7 @@
                             <div class="space-y-2">
                                 <label
                                     class="text-xs font-bold text-blue-400 uppercase tracking-widest">Semester</label>
-                                <select name="semester"
+                                <select id="pyq-semester-select" name="semester"
                                     class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white">
                                     <option value="1">Semester 1</option>
                                     <option value="2">Semester 2</option>
@@ -387,8 +395,16 @@
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Exam
                                     Year</label>
-                                <input type="number" name="year" placeholder="2025" required
+                                <select name="year" required
                                     class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white">
+                                    <option value="">Select Year</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                </select>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Subject
@@ -443,6 +459,66 @@
                     "nursing": ["B.Sc Nursing", "Post Basic Nursing"]
                 };
 
+                const semesterLimits = {
+                    "BCA": 6,
+                    "BA LLB": 10,
+                    "LLB": 6,
+                    "B.Tech AI & ML": 8,
+                    "Computer Science & Engineering (CSE)": 8,
+                    "Information Technology (IT)": 8,
+                    "Mechanical Engineering": 8,
+                    "Civil Engineering": 8,
+                    "M.Tech: Mechanical Engineering": 4,
+                    "Diploma: Engineering (Polytechnic)": 6,
+                    "BBA": 6,
+                    "MBA": 4,
+                    "B.Com": 6,
+                    "M.Com": 4,
+                    "BHA": 4,
+                    "MHA": 4,
+                    "MCA": 4,
+                    "B.Sc IT": 6,
+                    "M.Sc CS": 4,
+                    "B.Pharm": 8,
+                    "D.Pharm": 4,
+                    "M.Pharm": 4,
+                    "B.Sc Nursing": 4,
+                    "B.Ed": 2,
+                    "M.Ed": 2,
+                    "B.Sc (Physics/Chem/Maths)": 6,
+                    "B.A. (English/Hindi)": 6,
+                    "Vocational Studies": 3,
+                    "Fine Arts": 6,
+                    "Post Basic Nursing": 3
+                };
+
+                function populateSemesterOptions(selectId, maxSemester) {
+                    const select = document.getElementById(selectId);
+                    if (!select) return;
+                    select.innerHTML = '';
+                    for (let i = 1; i <= maxSemester; i += 1) {
+                        const option = document.createElement('option');
+                        option.value = i;
+                        option.textContent = `Semester ${i}`;
+                        select.appendChild(option);
+                    }
+                }
+
+                function updateSemesterForBranch(courseSelectId, semesterSelectId) {
+                    const courseSelect = document.getElementById(courseSelectId);
+                    const selectedCourse = courseSelect ? courseSelect.value : '';
+                    const maxSemester = semesterLimits[selectedCourse] || 8;
+                    populateSemesterOptions(semesterSelectId, maxSemester);
+                }
+
+                function updatePyqSemester() {
+                    updateSemesterForBranch('course-select', 'pyq-semester-select');
+                }
+
+                function updateNotesSemester() {
+                    updateSemesterForBranch('notes-course-select', 'notes-semester-select');
+                }
+
                 function updateCourses() {
                     const streamSelect = document.getElementById('stream-select');
                     const courseSelect = document.getElementById('course-select');
@@ -462,6 +538,7 @@
                         courseSelect.disabled = true;
                         courseSelect.innerHTML = '<option value="">First select a stream...</option>';
                     }
+                    updatePyqSemester();
                 }
 
                 function checkFiles(input) {
@@ -491,6 +568,7 @@
                     } else {
                         courseSelect.disabled = true;
                     }
+                    updateNotesSemester();
                 }
 
                 function checkNotesFile(input) {

@@ -15,13 +15,7 @@
         @keyframes wave1 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         
         /* Custom styling for dark selects */
-        select {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.5rem center;
-            background-repeat: no-repeat;
-            background-size: 1.5em 1.5em;
-            appearance: none;
-        }
+        select option { background-color: #1e293b; color: white; }
     </style>
 </head>
 <body class="text-slate-200 font-sans">
@@ -79,31 +73,52 @@
 
         <div id="filterSection" class="glass-card rounded-3xl p-8 mb-16 border border-slate-800 shadow-2xl relative z-10">
             <h2 class="text-sm font-bold text-indigo-400 uppercase tracking-[0.2em] mb-6">Filter Question Papers</h2>
-            <div class="grid md:grid-cols-3 gap-6">
+            <div class="grid md:grid-cols-5 gap-6">
                 <div class="space-y-2">
                     <label class="text-[10px] uppercase font-bold text-slate-500 ml-2">Stream</label>
                     <select id="streamFilter" class="w-full p-4 bg-slate-900/80 border border-slate-700 rounded-2xl text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
                         <option value="">Select Stream</option>
-                        <option value="engineering">Engineering</option>
-                        <option value="management">Management</option>
-                        <option value="computer">Computer Applications</option>
-                        <option value="pharmacy">Pharmacy</option>
-                        <option value="law">Law</option>
-                        <option value="sciences">Sciences</option>
+                        <option value="engineering">⚙️ Engineering & Technology</option>
+                        <option value="management">💼 Management & Commerce</option>
+                        <option value="computer">💻 Computer Applications</option>
+                        <option value="pharmacy">💊 Pharmacy & Healthcare</option>
+                        <option value="law">⚖️ Law & Education</option>
+                        <option value="sciences">🎨 Sciences, Arts & Vocational</option>
+                        <option value="nursing">🩺 Nursing & Allied Health</option>
                     </select>
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-[10px] uppercase font-bold text-slate-500 ml-2">Branch</label>
-                    <select id="branchFilter" class="w-full p-4 bg-slate-900/80 border border-slate-700 rounded-2xl text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                    <select id="branchFilter" class="w-full p-4 bg-slate-900/80 border border-slate-700 rounded-2xl text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" disabled>
                         <option value="">Select Branch</option>
                     </select>
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-[10px] uppercase font-bold text-slate-500 ml-2">Semester</label>
-                    <select id="semesterFilter" class="w-full p-4 bg-slate-900/80 border border-slate-700 rounded-2xl text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                    <select id="semesterFilter" class="w-full p-4 bg-slate-900/80 border border-slate-700 rounded-2xl text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" disabled>
                         <option value="">Select Semester</option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] uppercase font-bold text-slate-500 ml-2">Subject</label>
+                    <select id="subjectFilter" class="w-full p-4 bg-slate-900/80 border border-slate-700 rounded-2xl text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" disabled>
+                        <option value="">Select Subject</option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] uppercase font-bold text-slate-500 ml-2">Year</label>
+                    <select id="yearFilter" class="w-full p-4 bg-slate-900/80 border border-slate-700 rounded-2xl text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                        <option value="">All Years</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                        <option value="2029">2029</option>
+                        <option value="2030">2030</option>
                     </select>
                 </div>
             </div>
@@ -119,20 +134,46 @@
         const container = document.getElementById("pyqsContainer");
 
         const branchData = {
-            engineering: ["Computer Science & Engineering (CSE)", "B.Tech AI & ML", "Information Technology (IT)", "Mechanical Engineering", "Civil Engineering"],
-            management: ["BBA", "MBA", "B.Com", "M.Com"],
+            engineering: ["Computer Science & Engineering (CSE)", "B.Tech AI & ML", "Information Technology (IT)", "Mechanical Engineering", "Civil Engineering", "M.Tech: Mechanical Engineering", "Diploma: Engineering (Polytechnic)"],
+            management: ["BBA", "MBA", "B.Com", "M.Com", "BHA", "MHA"],
             computer: ["BCA", "MCA", "B.Sc IT", "M.Sc CS"],
-            pharmacy: ["B.Pharm", "D.Pharm"],
-            law: ["LLB", "BA LLB"],
-            sciences: ["B.Sc", "B.A", "Fine Arts"]
+            pharmacy: ["B.Pharm", "D.Pharm", "M.Pharm"],
+            law: ["LLB", "BA LLB", "B.Ed", "M.Ed"],
+            sciences: ["B.Sc (Physics/Chem/Maths)", "B.A. (English/Hindi)", "Vocational Studies", "Fine Arts"],
+            nursing: ["B.Sc Nursing", "Post Basic Nursing"]
         };
 
         const semesterData = { 
-            "BCA": 6, "MCA": 4, "B.Sc IT": 6, "M.Sc CS": 4, "B.Tech AI & ML": 8, 
-            "Computer Science & Engineering (CSE)": 8, "Information Technology (IT)": 8, 
-            "Mechanical Engineering": 8, "Civil Engineering": 8, "BBA": 6, "MBA": 4, 
-            "B.Com": 6, "M.Com": 4, "B.Pharm": 8, "D.Pharm": 4, "LLB": 3, "BA LLB": 10, 
-            "B.Sc": 6, "B.A": 6, "Fine Arts": 6 
+            "BCA": 6,
+            "BA LLB": 10,
+            "LLB": 6,
+            "B.Tech AI & ML": 8,
+            "Computer Science & Engineering (CSE)": 8,
+            "Information Technology (IT)": 8,
+            "Mechanical Engineering": 8,
+            "Civil Engineering": 8,
+            "M.Tech: Mechanical Engineering": 4,
+            "Diploma: Engineering (Polytechnic)": 6,
+            "BBA": 6,
+            "MBA": 4,
+            "B.Com": 6,
+            "M.Com": 4,
+            "BHA": 8,
+            "MHA": 4,
+            "MCA": 4,
+            "B.Sc IT": 6,
+            "M.Sc CS": 4,
+            "B.Pharm": 8,
+            "D.Pharm": 4,
+            "M.Pharm": 4,
+            "B.Sc Nursing": 8,
+            "B.Ed": 4,
+            "M.Ed": 4,
+            "B.Sc (Physics/Chem/Maths)": 6,
+            "B.A. (English/Hindi)": 6,
+            "Vocational Studies": 3,
+            "Fine Arts": 6,
+            "Post Basic Nursing": 4
         };
 
         async function loadPYQS() {
@@ -166,22 +207,26 @@
         const streamFilter = document.getElementById("streamFilter");
         const branchFilter = document.getElementById("branchFilter");
         const semesterFilter = document.getElementById("semesterFilter");
+        const subjectFilter = document.getElementById("subjectFilter");
+        const yearFilter = document.getElementById("yearFilter");
 
         streamFilter.addEventListener("change", function () {
-            const stream = this.value;
             branchFilter.innerHTML = '<option value="">Select Branch</option>';
-            if (branchData[stream]) {
-                branchData[stream].forEach(branch => {
+            branchFilter.disabled = !this.value;
+            if (branchData[this.value]) {
+                branchData[this.value].forEach(branch => {
                     const option = document.createElement("option");
                     option.value = branch;
                     option.textContent = branch;
                     branchFilter.appendChild(option);
                 });
             }
+            resetFilters(['semesterFilter', 'subjectFilter']);
         });
 
         branchFilter.addEventListener("change", function () {
             semesterFilter.innerHTML = '<option value="">Select Semester</option>';
+            semesterFilter.disabled = !this.value;
             const selectedBranch = this.value.trim();
             const totalSem = semesterData[selectedBranch] || 6;
             for (let i = 1; i <= totalSem; i++) {
@@ -190,17 +235,47 @@
                 option.textContent = "Semester " + i;
                 semesterFilter.appendChild(option);
             }
+            resetFilters(['subjectFilter']);
         });
 
-        semesterFilter.addEventListener("change", showResults);
+        semesterFilter.addEventListener("change", function () {
+            const branch = branchFilter.value;
+            const sem = this.value;
+            subjectFilter.innerHTML = '<option value="">Select Subject</option>';
+            
+            const filteredData = allPyqs.filter(p => p.branch === branch && p.semester == sem);
+
+            if (filteredData.length > 0) {
+                subjectFilter.disabled = false;
+                const subjects = [...new Set(filteredData.map(p => p.subject))];
+                subjects.forEach(sub => subjectFilter.add(new Option(sub, sub)));
+                showResults();
+            } else {
+                subjectFilter.disabled = true;
+                container.innerHTML = `<div class="col-span-full text-center py-20 opacity-40">No papers found for ${branch}, Semester ${sem}</div>`;
+            }
+        });
+
+        subjectFilter.addEventListener("change", showResults);
+        yearFilter.addEventListener("change", showResults);
 
         function showResults() {
             const filtered = allPyqs.filter(p =>
-                p.stream === streamFilter.value &&
-                p.branch === branchFilter.value &&
-                p.semester == semesterFilter.value
+                (streamFilter.value === "" || p.stream === streamFilter.value) &&
+                (branchFilter.value === "" || p.branch === branchFilter.value) &&
+                (semesterFilter.value === "" || p.semester == semesterFilter.value) &&
+                (subjectFilter.value === "" || p.subject === subjectFilter.value) &&
+                (yearFilter.value === "" || p.year == yearFilter.value)
             );
             renderCards(filtered);
+        }
+
+        function resetFilters(ids) {
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                el.innerHTML = `<option value="">${id === 'yearFilter' ? 'All Years' : 'Select ' + id.replace('Filter', '')}</option>`;
+                el.disabled = id !== 'yearFilter';
+            });
         }
 
         function renderCards(data) {

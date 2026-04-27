@@ -54,7 +54,7 @@
                 <a href="index.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Home</a>
                 <a href="notice.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Notice</a>
                 <a href="pyqs.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">PYQs</a>
-                <a href="notes.html" class="text-sm font-bold text-indigo-400">Notes</a>
+                <a href="notes.html" class="text-sm font-bold text-indigo-400 border-b-2 border-indigo-400 inline-block">Notes</a>
                 <a href="events.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Events</a>
                 <a href="about.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">About</a>
                 <a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-indigo-400 transition">Contact</a>
@@ -79,11 +79,13 @@
                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">Stream</label>
                     <select id="streamFilter" class="w-full bg-[#0f172a] border border-slate-700 rounded-xl p-3 text-sm text-white outline-none focus:border-indigo-500 transition shadow-inner cursor-pointer">
                         <option value="">Select Stream</option>
-                        <option value="engineering">Engineering</option>
-                        <option value="management">Management</option>
-                        <option value="computer">Computer Applications</option>
-                        <option value="pharmacy">Pharmacy</option>
-                        <option value="nursing">Nursing</option>
+                        <option value="engineering">⚙️ Engineering & Technology</option>
+                        <option value="management">💼 Management & Commerce</option>
+                        <option value="computer">💻 Computer Applications</option>
+                        <option value="pharmacy">💊 Pharmacy & Healthcare</option>
+                        <option value="law">⚖️ Law & Education</option>
+                        <option value="sciences">🎨 Sciences, Arts & Vocational</option>
+                        <option value="nursing">🩺 Nursing & Allied Health</option>
                     </select>
                 </div>
 
@@ -96,14 +98,14 @@
 
                 <div>
                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">Semester</label>
-                    <select id="semesterFilter" class="w-full bg-[#0f172a] border border-slate-700 rounded-xl p-3 text-sm text-white outline-none focus:border-indigo-500 transition shadow-inner cursor-pointer" disabled>
+                    <select id="semesterFilter" class="w-full bg-[#0f172a] border border-slate-700 rounded-xl p-3 text-sm text-white outline-none focus:border-indigo-500 transition shadow-inner cursor-pointer">
                         <option value="">Select Semester</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1 text-indigo-400">Subject</label>
-                    <select id="subjectFilter" class="w-full bg-[#0f172a] border border-slate-700 rounded-xl p-3 text-sm text-white outline-none focus:border-indigo-500 transition shadow-inner cursor-pointer" disabled>
+                    <select id="subjectFilter" class="w-full bg-[#0f172a] border border-slate-700 rounded-xl p-3 text-sm text-white outline-none focus:border-indigo-500 transition shadow-inner cursor-pointer">
                         <option value="">Select Subject</option>
                     </select>
                 </div>
@@ -112,8 +114,12 @@
                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">Year</label>
                     <select id="yearFilter" class="w-full bg-[#0f172a] border border-slate-700 rounded-xl p-3 text-sm text-white outline-none focus:border-indigo-500 transition shadow-inner cursor-pointer">
                         <option value="">All Years</option>
-                        <option value="2026">2026</option>
                         <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                        <option value="2029">2029</option>
+                        <option value="2030">2030</option>
                     </select>
                 </div>
             </div>
@@ -137,11 +143,46 @@
     const notesGrid = document.getElementById("notesGrid");
 
     const branchData = {
-        engineering: ["Computer Science & Engineering (CSE)", "B.Tech AI & ML", "Information Technology (IT)", "Mechanical Engineering", "Civil Engineering"],
-        management: ["BBA", "MBA", "B.Com", "M.Com"],
+        engineering: ["Computer Science & Engineering (CSE)", "B.Tech AI & ML", "Information Technology (IT)", "Mechanical Engineering", "Civil Engineering", "M.Tech: Mechanical Engineering", "Diploma: Engineering (Polytechnic)"],
+        management: ["BBA", "MBA", "B.Com", "M.Com", "BHA", "MHA"],
         computer: ["BCA", "MCA", "B.Sc IT", "M.Sc CS"],
-        pharmacy: ["B.Pharm", "D.Pharm"],
+        pharmacy: ["B.Pharm", "D.Pharm", "M.Pharm"],
+        law: ["LLB", "BA LLB", "B.Ed", "M.Ed"],
+        sciences: ["B.Sc (Physics/Chem/Maths)", "B.A. (English/Hindi)", "Vocational Studies", "Fine Arts"],
         nursing: ["B.Sc Nursing", "Post Basic Nursing"]
+    };
+
+    const semesterData = { 
+        "BCA": 6,
+        "BA LLB": 10,
+        "LLB": 6,
+        "B.Tech AI & ML": 8,
+        "Computer Science & Engineering (CSE)": 8,
+        "Information Technology (IT)": 8,
+        "Mechanical Engineering": 8,
+        "Civil Engineering": 8,
+        "M.Tech: Mechanical Engineering": 4,
+        "Diploma: Engineering (Polytechnic)": 6,
+        "BBA": 6,
+        "MBA": 4,
+        "B.Com": 6,
+        "M.Com": 4,
+        "BHA": 8,
+        "MHA": 4,
+        "MCA": 4,
+        "B.Sc IT": 6,
+        "M.Sc CS": 4,
+        "B.Pharm": 8,
+        "D.Pharm": 4,
+        "M.Pharm": 4,
+        "B.Sc Nursing": 8,
+        "B.Ed": 4,
+        "M.Ed": 4,
+        "B.Sc (Physics/Chem/Maths)": 6,
+        "B.A. (English/Hindi)": 6,
+        "Vocational Studies": 3,
+        "Fine Arts": 6,
+        "Post Basic Nursing": 4
     };
 
     async function fetchNotes() {
@@ -166,7 +207,9 @@
     branchFilter.addEventListener("change", function() {
         semesterFilter.innerHTML = '<option value="">Select Semester</option>';
         semesterFilter.disabled = !this.value;
-        for (let i = 1; i <= 8; i++) semesterFilter.add(new Option(`Semester ${i}`, i));
+        const selectedBranch = this.value.trim();
+        const totalSem = semesterData[selectedBranch] || 8;
+        for (let i = 1; i <= totalSem; i++) semesterFilter.add(new Option(`Semester ${i}`, i));
         resetFilters(['subjectFilter']);
     });
 
