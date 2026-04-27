@@ -748,7 +748,7 @@
 
                     console.log(`Publishing to ${endpoint}...`);
 
-                    fetch(`http://localhost:8080${endpoint}`, { //request to backend
+                    fetch(`https://rb-studentport-backend-production.up.railway.app${endpoint}`, { //request to backend
                         method: "POST",
                         body: formData
                     })
@@ -769,9 +769,9 @@
             };
 
 
-            handleFormSubmit("noticeForm", "/notices"); //connects forms with their respective functions
-            handleFormSubmit("pyqForm", "/pyqs");
-            handleFormSubmit("eventForm", "/events");
+            handleFormSubmit("noticeForm", "/api/notices"); //connects forms with their respective functions
+            handleFormSubmit("pyqForm", "/api/pyqs");
+            handleFormSubmit("eventForm", "/api/events");
             handleFormSubmit("notesForm", "/api/notes/upload");
         });
     </script>

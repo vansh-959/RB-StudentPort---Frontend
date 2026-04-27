@@ -129,7 +129,7 @@
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    fetch(`http://localhost:8080/pyqs/${id}`)
+    fetch(`https://rb-studentport-backend-production.up.railway.app/api/pyqs/${id}`)
       .then(res => res.json())
       .then(data => {
         document.getElementById("loader").classList.add("hidden");
@@ -142,7 +142,7 @@
         document.getElementById("year").innerText = data.year;
 
         const pdfLink = document.createElement("a");
-        pdfLink.href = "http://localhost:8080/uploads/pyqs/" + data.fileName;
+        pdfLink.href = "https://rb-studentport-backend-production.up.railway.app/uploads/pyqs/" + data.fileName;
         pdfLink.target = "_blank";
         pdfLink.className = "w-full flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 px-6 rounded-2xl shadow-xl shadow-indigo-600/20 transition-all transform hover:-translate-y-1 active:scale-95 uppercase text-sm tracking-widest";
         pdfLink.innerHTML = `

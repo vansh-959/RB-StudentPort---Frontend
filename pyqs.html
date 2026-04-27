@@ -185,7 +185,7 @@
                 container.innerHTML = `<div class="col-span-full text-center py-12 text-indigo-400 font-bold">Searching for "${searchQuery}"...</div>`;
                 
                 try {
-                    const response = await fetch(`http://localhost:8080/api/search/all?query=${encodeURIComponent(searchQuery)}`);
+                    const response = await fetch(`https://rb-studentport-backend-production.up.railway.app/api/search/all?query=${encodeURIComponent(searchQuery)}`);
                     const data = await response.json();
                     let results = data.pyqs || []; 
                     renderCards(results);
@@ -194,7 +194,7 @@
                 }
             } else {
                 try {
-                    const response = await fetch("http://localhost:8080/pyqs");
+                    const response = await fetch("https://rb-studentport-backend-production.up.railway.app/api/pyqs");
                     allPyqs = await response.json();
                     container.innerHTML = `<div class="col-span-full text-center text-slate-500 py-12">Select your criteria above to explore papers.</div>`;
                 } catch (error) {

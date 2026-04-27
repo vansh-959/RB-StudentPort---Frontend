@@ -74,7 +74,7 @@
     </main>
 
     <script>
-        fetch("http://localhost:8080/notices")
+        fetch("https://rb-studentport-backend-production.up.railway.app/api/notices")
             .then(response => response.json())
             .then(data => {
                 const noticeList = document.getElementById("noticeList");

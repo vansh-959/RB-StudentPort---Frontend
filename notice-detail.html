@@ -129,7 +129,7 @@
     const realContent = document.getElementById("realContent");
     const pdfContainer = document.getElementById("pdfContainer");
 
-    fetch(`http://localhost:8080/notices/${id}`)
+    fetch(`https://rb-studentport-backend-production.up.railway.app/api/notices/${id}`)
       .then(res => {
         if (!res.ok) throw new Error("Notice not found");
         return res.json();
@@ -139,7 +139,7 @@
         dateText.innerText = data.publicationDate;
         
         const pdfLink = document.createElement("a");
-        pdfLink.href = "http://localhost:8080/uploads/" + data.pdfPath;
+        pdfLink.href = "https://rb-studentport-backend-production.up.railway.app/uploads/" + data.pdfPath;
         pdfLink.target = "_blank";
         pdfLink.innerHTML = `
             <i class="fas fa-file-pdf text-xl"></i>

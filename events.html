@@ -156,7 +156,7 @@
             });
         }
 
-        fetch("http://localhost:8080/events")
+        fetch("https://rb-studentport-backend-production.up.railway.app/api/events")
             .then(res => res.json())
             .then(data => renderEvents(data))
             .catch(err => console.error("Error:", err));
