@@ -60,6 +60,34 @@ html, body {
 /* Hamburger to Cross Icon Logic */
 #menu-toggle:checked ~ label .ham-icon { display: none; }
 #menu-toggle:checked ~ label .close-icon { display: block; }
+
+#toastContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.toast {
+  min-width: 260px;
+  max-width: 360px;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #e2e8f0;
+  font-size: 14px;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  background: rgba(15, 23, 42, 0.94);
+  box-shadow: 0 12px 25px rgba(2, 6, 23, 0.4);
+}
+.toast.error { border-left: 4px solid #ef4444; }
+
+.guest-locked {
+  filter: blur(2px);
+  opacity: 0.6;
+  pointer-events: none;
+}
 </style>
 </head>
 
@@ -87,11 +115,16 @@ html, body {
   <ul class="hidden md:flex gap-8 text-sm font-medium">
     <li><a href="index.html" class="nav-link">Home</a></li>
     <li><a href="notice.html" class="nav-link">Notice</a></li>
-    <li><a href="pyqs.html" class="nav-link">PYQs</a></li>
-    <li><a href="notes.html" class="nav-link">Notes</a></li>
+    <li><a href="pyqs.html" class="nav-link premium-link">PYQs</a></li>
+    <li><a href="notes.html" class="nav-link premium-link">Notes</a></li>
     <li><a href="events.html" class="nav-link">Events</a></li>
     <li><a href="about.html" class="nav-link">About</a></li>
     <li><a href="contact.html" class="nav-link">Contact</a></li>
+    <li id="auth-links">
+      <a href="login.html" class="nav-link">Login</a>
+      <span class="text-slate-500">|</span>
+      <a href="signup.html" class="nav-link">Sign Up</a>
+    </li>
   </ul>
 
   <label for="menu-toggle"
@@ -104,11 +137,15 @@ html, body {
     </div>
     <a href="index.html" class="nav-link">Home</a>
     <a href="notice.html" class="nav-link">Notice</a>
-    <a href="pyqs.html" class="nav-link">PYQs</a>
-    <a href="notes.html" class="nav-link">Notes</a>
+    <a href="pyqs.html" class="nav-link premium-link">PYQs</a>
+    <a href="notes.html" class="nav-link premium-link">Notes</a>
     <a href="events.html" class="nav-link">Events</a>
     <a href="about.html" class="nav-link">About</a>
     <a href="contact.html" class="nav-link">Contact</a>
+    <div id="mobile-auth-links" class="border-t border-indigo-800 pt-4 mt-4">
+      <a href="login.html" class="nav-link block">Login</a>
+      <a href="signup.html" class="nav-link block mt-2">Sign Up</a>
+    </div>
   </div>
 
 </div>
@@ -168,6 +205,7 @@ html, body {
     </div>
   </div>
 </div>
+<div id="toastContainer"></div>
 
 <script>
 const menuToggle = document.getElementById('menu-toggle');
@@ -196,6 +234,15 @@ const searchForm = document.getElementById('searchForm');
 const searchDropdown = document.getElementById('searchDropdown');
 const searchList = document.getElementById('searchList');
 const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+function showToast(message, type = 'error') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3200);
+}
 
 // Load search history from localStorage
 function loadSearchHistory() {
@@ -298,7 +345,53 @@ function performSearch(e) {
   window.location.href = `search-results.html?q=${encodeURIComponent(rawQuery)}`;
 }
 searchForm.addEventListener('submit', performSearch);
+
+// Authentication Logic
+function checkAuth() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const authLinks = document.getElementById('auth-links');
+  const mobileAuthLinks = document.getElementById('mobile-auth-links');
+  const premiumLinks = document.querySelectorAll('.premium-link');
+
+  if (user) {
+    // User is logged in
+    authLinks.innerHTML = `
+      <span class="text-slate-300">Welcome, ${user.name}</span>
+      <span class="text-slate-500">|</span>
+      <a href="#" onclick="logout()" class="nav-link">Logout</a>
+    `;
+    mobileAuthLinks.innerHTML = `
+      <span class="text-slate-300 block">Welcome, ${user.name}</span>
+      <a href="#" onclick="logout()" class="nav-link block mt-2">Logout</a>
+    `;
+  } else {
+    // User is not logged in
+    premiumLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        showToast('Please login to access premium services (Notes & PYQs)');
+        window.location.href = 'login.html';
+      });
+    });
+
+    searchInput.disabled = true;
+    searchInput.placeholder = 'Login required to use search';
+    searchForm.classList.add('guest-locked');
+    searchForm.addEventListener('click', function() {
+      showToast('Please login/signup to use search');
+    });
+  }
+}
+
+function logout() {
+  localStorage.removeItem('user');
+  window.location.reload();
+}
+
+// Check authentication on page load
+checkAuth();
 </script>
 
+<script src="auth.js"></script>
 </body>
 </html>

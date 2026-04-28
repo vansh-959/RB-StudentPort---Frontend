@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | RB-Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #020617; color: #e2e8f0; }
+        .glass-card { 
+            background: rgba(15, 23, 42, 0.6); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(51, 65, 85, 0.5); 
+        }
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            min-width: 260px;
+            max-width: 360px;
+            border-radius: 12px;
+            padding: 12px 14px;
+            color: #e2e8f0;
+            font-size: 14px;
+            border: 1px solid rgba(51, 65, 85, 0.7);
+            background: rgba(15, 23, 42, 0.92);
+            box-shadow: 0 12px 25px rgba(2, 6, 23, 0.4);
+            animation: fadeIn 0.2s ease;
+        }
+        .toast.success { border-left: 4px solid #22c55e; }
+        .toast.error { border-left: 4px solid #ef4444; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="glass-card rounded-3xl p-8 w-full max-w-md">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">Join RB-Portal</h1>
+            <p class="text-slate-400">Create your account to access premium services</p>
+        </div>
+
+        <form id="signupForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+                <input type="text" id="name" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                <input type="email" id="email" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
+                <input type="tel" id="phoneNumber" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Branch</label>
+                <select id="branch" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Select Branch</option>
+                    <option value="BCA">BCA</option>
+                    <option value="B.Sc IT">B.Sc IT</option>
+                    <option value="MCA">MCA</option>
+                    <option value="M.Sc CS">M.Sc CS</option>
+                    <option value="B.Pharm">B.Pharm</option>
+                    <option value="M.Pharm">M.Pharm</option>
+                    <option value="B.Sc Nursing">B.Sc Nursing</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                <input type="password" id="password" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-indigo-500/20">
+                Sign Up
+            </button>
+        </form>
+
+        <div class="text-center mt-6">
+            <p class="text-slate-400">Already have an account? <a href="login.html" class="text-indigo-400 hover:text-indigo-300">Login</a></p>
+        </div>
+    </div>
+    <div id="toastContainer"></div>
+
+    <script>
+        function getApiBaseUrl() {
+            const host = window.location.hostname;
+            if (host === 'localhost' || host === '127.0.0.1') {
+                return 'http://localhost:8080';
+            }
+            return 'https://rb-studentport-backend-production.up.railway.app';
+        }
+
+        function showToast(message, type = 'error') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 3200);
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const branch = document.getElementById('branch').value;
+            const password = document.getElementById('password').value;
+            const apiBaseUrl = getApiBaseUrl();
+            const requestUrl = `${apiBaseUrl}/api/auth/signup`;
+            const payload = { name, email, phoneNumber, branch, password };
+
+            console.log('[Signup] Host:', window.location.host);
+            console.log('[Signup] API Base URL:', apiBaseUrl);
+            console.log('[Signup] Request URL:', requestUrl);
+            console.log('[Signup] Payload:', { ...payload, password: '***hidden***' });
+
+            try {
+                const response = await fetch(requestUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log('[Signup] HTTP Status:', response.status, response.statusText);
+
+                const rawBody = await response.text();
+                console.log('[Signup] Raw Response:', rawBody);
+
+                let data = {};
+                try {
+                    data = rawBody ? JSON.parse(rawBody) : {};
+                } catch (parseError) {
+                    console.error('[Signup] JSON Parse Error:', parseError);
+                }
+
+                if (response.ok && data.success) {
+                    showToast('Signup successful! Redirecting to login...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 900);
+                } else {
+                    console.error('[Signup] Signup rejected by server:', data);
+                    showToast(data.message || 'Signup failed.');
+                }
+            } catch (error) {
+                console.error('[Signup] Network/Fetch Error:', error);
+                if (error && error.message) {
+                    console.error('[Signup] Error message:', error.message);
+                }
+                showToast('Signup failed. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

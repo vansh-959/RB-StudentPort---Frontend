@@ -17,6 +17,7 @@
 </head>
 
 <body class="bg-gray-900 text-white font-sans">
+    <div id="toastContainer" class="fixed top-5 right-5 z-[9999] space-y-2"></div>
 
     <script>
         // Check if admin logged in
@@ -735,6 +736,18 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () { //This ensures HTML is loaded before JS runs
 
+            const showToast = (message, type = "success") => {
+                const container = document.getElementById("toastContainer");
+                const toast = document.createElement("div");
+                const tone = type === "success"
+                    ? "border-emerald-500"
+                    : "border-red-500";
+                toast.className = `min-w-[260px] max-w-[360px] rounded-xl border border-gray-700 ${tone} border-l-4 bg-gray-900/95 px-4 py-3 text-sm text-gray-100 shadow-2xl`;
+                toast.textContent = message;
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 3200);
+            };
+
 
             const handleFormSubmit = (formId, endpoint) => { //sends form data to backend
                 const form = document.getElementById(formId);
@@ -754,7 +767,7 @@
                     })
                         .then(res => {
                             if (res.ok) {
-                                alert("Published successfully!");
+                                showToast("Published successfully!", "success");
                                 form.reset();
                                 if (typeof resetNoticeUI === "function") resetNoticeUI();
                             } else {
@@ -763,7 +776,7 @@
                         })
                         .catch(err => {
                             console.error(err);
-                            alert("Upload failed. Check if the backend is running on port 8080.");
+                            showToast("Upload failed. Please check backend/server status.", "error");
                         });
                 };
             };

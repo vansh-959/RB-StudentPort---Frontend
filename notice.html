@@ -13,6 +13,23 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         @keyframes wave1 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+        }
+        .toast {
+            min-width: 260px;
+            max-width: 360px;
+            border-radius: 12px;
+            padding: 12px 14px;
+            color: #e2e8f0;
+            font-size: 14px;
+            border: 1px solid rgba(51, 65, 85, 0.7);
+            background: rgba(15, 23, 42, 0.94);
+            border-left: 4px solid #ef4444;
+        }
     </style>
 </head>
 <body class="text-slate-200 font-sans">
@@ -73,7 +90,26 @@
         </div>
     </main>
 
+    <div id="toastContainer"></div>
     <script>
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3200);
+        }
+
+        // Check authentication
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            showToast('Please login to access this page');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 900);
+        }
+
         fetch("https://rb-studentport-backend-production.up.railway.app/api/notices")
             .then(response => response.json())
             .then(data => {
