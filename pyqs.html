@@ -147,6 +147,14 @@
 
     <div id="toastContainer"></div>
     <script>
+        function getApiBaseUrl() {
+            const host = window.location.hostname;
+            if (host === 'localhost' || host === '127.0.0.1') {
+                return 'http://localhost:8080';
+            }
+            return 'https://rb-studentport-backend-production.up.railway.app';
+        }
+
         function showToast(message) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -176,7 +184,7 @@
             pharmacy: ["B.Pharm", "D.Pharm", "M.Pharm"],
             law: ["LLB", "BA LLB", "B.Ed", "M.Ed"],
             sciences: ["B.Sc (Physics/Chem/Maths)", "B.A. (English/Hindi)", "Vocational Studies", "Fine Arts"],
-            nursing: ["B.Sc Nursing", "Post Basic Nursing"]
+            nursing: ["B.Sc Nursing", "Post Basic Nursing", "OT", "Radiology"]
         };
 
         const semesterData = { 
@@ -203,6 +211,8 @@
             "D.Pharm": 4,
             "M.Pharm": 4,
             "B.Sc Nursing": 8,
+            "OT": 6,
+            "Radiology": 6,
             "B.Ed": 4,
             "M.Ed": 4,
             "B.Sc (Physics/Chem/Maths)": 6,
@@ -215,13 +225,14 @@
         async function loadPYQS() {
             const urlParams = new URLSearchParams(window.location.search);
             const searchQuery = urlParams.get('search');
+            const apiBaseUrl = getApiBaseUrl();
 
             if (searchQuery) {
                 if (filterSection) filterSection.style.display = 'none';
                 container.innerHTML = `<div class="col-span-full text-center py-12 text-indigo-400 font-bold">Searching for "${searchQuery}"...</div>`;
                 
                 try {
-                    const response = await fetch(`https://rb-studentport-backend-production.up.railway.app/api/search/all?query=${encodeURIComponent(searchQuery)}`);
+                    const response = await fetch(`${apiBaseUrl}/api/search/all?query=${encodeURIComponent(searchQuery)}`);
                     const data = await response.json();
                     let results = data.pyqs || []; 
                     renderCards(results);
@@ -230,7 +241,7 @@
                 }
             } else {
                 try {
-                    const response = await fetch("https://rb-studentport-backend-production.up.railway.app/api/pyqs");
+                    const response = await fetch(`${apiBaseUrl}/api/pyqs`);
                     allPyqs = await response.json();
                     container.innerHTML = `<div class="col-span-full text-center text-slate-500 py-12">Select your criteria above to explore papers.</div>`;
                 } catch (error) {

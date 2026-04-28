@@ -151,6 +151,14 @@
 
     <div id="toastContainer"></div>
     <script>
+    function getApiBaseUrl() {
+        const host = window.location.hostname;
+        if (host === 'localhost' || host === '127.0.0.1') {
+            return 'http://localhost:8080';
+        }
+        return 'https://rb-studentport-backend-production.up.railway.app';
+    }
+
     function showToast(message) {
         const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
@@ -185,7 +193,7 @@
         pharmacy: ["B.Pharm", "D.Pharm", "M.Pharm"],
         law: ["LLB", "BA LLB", "B.Ed", "M.Ed"],
         sciences: ["B.Sc (Physics/Chem/Maths)", "B.A. (English/Hindi)", "Vocational Studies", "Fine Arts"],
-        nursing: ["B.Sc Nursing", "Post Basic Nursing"]
+        nursing: ["B.Sc Nursing", "Post Basic Nursing", "OT", "Radiology"]
     };
 
     const semesterData = { 
@@ -212,6 +220,8 @@
         "D.Pharm": 4,
         "M.Pharm": 4,
         "B.Sc Nursing": 8,
+        "OT": 6,
+        "Radiology": 6,
         "B.Ed": 4,
         "M.Ed": 4,
         "B.Sc (Physics/Chem/Maths)": 6,
@@ -223,7 +233,7 @@
 
     async function fetchNotes() {
         try {
-            const response = await fetch("https://rb-studentport-backend-production.up.railway.app/api/notes");
+            const response = await fetch(`${getApiBaseUrl()}/api/notes`);
             allNotes = await response.json();
             console.log("1. Backend Data Loaded:", allNotes);
         } catch (error) {

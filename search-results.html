@@ -57,6 +57,14 @@
         const statusText = document.getElementById('search-status');
         const noResults = document.getElementById('no-results');
 
+        function getApiBaseUrl() {
+            const host = window.location.hostname;
+            if (host === 'localhost' || host === '127.0.0.1') {
+                return 'http://localhost:8080';
+            }
+            return 'https://rb-studentport-backend-production.up.railway.app';
+        }
+
         // URL ton query kaddna
         const urlParams = new URLSearchParams(window.location.search);
         const query = urlParams.get('q');
@@ -70,18 +78,30 @@
 
         async function fetchResults(q) {
             try {
+                const apiBaseUrl = getApiBaseUrl();
+                console.log('[Search] API Base URL:', apiBaseUrl);
+                console.log('[Search] Query:', q);
+
                 // Backend API Call (GlobalSearchController endpoint)
-                const response = await fetch(`https://rb-studentport-backend-production.up.railway.app/api/search/all?query=${encodeURIComponent(q)}`);
+                const response = await fetch(`${apiBaseUrl}/api/search/all?query=${encodeURIComponent(q)}`);
                 const data = await response.json();
+                console.log('[Search] Response:', data);
 
                 wrapper.innerHTML = ""; // Clear loader
                 
                 let hasAnyResult = false;
+                const notesCount = data.notes?.length || 0;
+                const pyqsCount = data.pyqs?.length || 0;
+                const noticesCount = data.notices?.length || 0;
+                const eventsCount = data.events?.length || 0;
+                const totalCount = notesCount + pyqsCount + noticesCount + eventsCount;
+
+                statusText.innerText = `${totalCount} RESULTS FOR "${q}"`;
 
                 // 1. NOTICES SECTION
                 if (data.notices && data.notices.length > 0) {
                     hasAnyResult = true;
-                    renderSection("Latest Notices", data.notices, 'title', 'indigo', 'notice.html');
+                    renderSection(`Latest Notices (${noticesCount})`, data.notices, 'title', 'indigo', 'notice.html');
                 }
 
                 // 2. PYQS SECTION
@@ -99,7 +119,7 @@
                 // 4. EVENTS SECTION
                 if (data.events && data.events.length > 0) {
                     hasAnyResult = true;
-                    renderSection("Campus Events", data.events, 'title', 'amber', 'events.html');
+                    renderSection(`Campus Events (${eventsCount})`, data.events, 'title', 'amber', 'events.html');
                 }
 
                 if (!hasAnyResult) {
@@ -135,13 +155,13 @@
         function renderNotes(notes) {
             const section = document.createElement('div');
             section.innerHTML = `
-                <h2 class="text-sm font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Academic Notes</h2>
+                <h2 class="text-sm font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Academic Notes (${notes.length})</h2>
                 <div class="grid gap-3">
                     ${notes.map(item => `
                         <a href="notes-detail.html?id=${item.id}" class="glass-card p-5 rounded-2xl flex items-center justify-between hover:bg-slate-800/50 transition group">
                             <div>
                                 <h3 class="text-white font-medium group-hover:text-emerald-400 transition">${item.subjectName}</h3>
-                                <p class="text-xs text-slate-500 mt-1 uppercase">Academic Document</p>
+                                <p class="text-xs text-slate-500 mt-1 uppercase">${item.branch || 'General'} • Sem ${item.semester || '-'} • ${item.year || '-'}</p>
                             </div>
                             <span class="text-slate-600 group-hover:text-white">→</span>
                         </a>
@@ -154,7 +174,7 @@
         function renderPyqs(pyqs) {
             const section = document.createElement('div');
             section.innerHTML = `
-                <h2 class="text-sm font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Question Papers</h2>
+                <h2 class="text-sm font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Question Papers (${pyqs.length})</h2>
                 <div class="grid gap-3">
                     ${pyqs.map(item => `
                         <div class="glass-card p-6 rounded-2xl border-l-4 border-indigo-500">
@@ -166,7 +186,7 @@
                                         <span class="text-[10px] bg-indigo-900/30 px-2 py-1 rounded text-indigo-400 uppercase font-bold">Sem ${item.semester}</span>
                                     </div>
                                 </div>
-                                <button onclick="window.location.href='https://rb-studentport-backend-production.up.railway.app/uploads/pyqs/${item.fileName}'" 
+                                <button onclick="window.location.href='${getApiBaseUrl()}/uploads/pyqs/${item.fileName}'" 
                                     class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-3 px-6 rounded-xl transition shadow-lg shadow-indigo-500/20">
                                     Download PDF
                                 </button>
