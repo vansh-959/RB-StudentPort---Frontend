@@ -4,101 +4,350 @@
     <meta charset="UTF-8">
     <title>OTP Verification | RB-Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #020617; color: #e2e8f0; }
+        .glass-card { 
+            background: rgba(15, 23, 42, 0.6); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(51, 65, 85, 0.5); 
+        }
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            min-width: 260px;
+            max-width: 360px;
+            border-radius: 12px;
+            padding: 12px 14px;
+            color: #e2e8f0;
+            font-size: 14px;
+            border: 1px solid rgba(51, 65, 85, 0.7);
+            background: rgba(15, 23, 42, 0.92);
+            box-shadow: 0 12px 25px rgba(2, 6, 23, 0.4);
+            animation: fadeIn 0.2s ease;
+        }
+        .toast.success { border-left: 4px solid #22c55e; }
+        .toast.error { border-left: 4px solid #ef4444; }
+        .toast.info { border-left: 4px solid #3b82f6; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+        }
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .spinner {
+            border: 3px solid rgba(100, 116, 139, 0.3);
+            border-top: 3px solid #6366f1;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 
-<body class="bg-slate-900 text-white flex items-center justify-center min-h-screen">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-<div class="bg-slate-800 p-8 rounded-2xl w-full max-w-md shadow-lg">
-
-    <h2 class="text-2xl font-bold mb-6 text-center">Signup with OTP</h2>
-
-    <!-- FORM -->
-    <div class="space-y-4">
-
-        <input id="name" type="text" placeholder="Name" class="w-full p-3 rounded bg-slate-700">
-
-        <input id="email" type="email" placeholder="Email" class="w-full p-3 rounded bg-slate-700">
-
-        <input id="phone" type="text" placeholder="Phone Number" class="w-full p-3 rounded bg-slate-700">
-
-        <input id="password" type="password" placeholder="Password" class="w-full p-3 rounded bg-slate-700">
-
-        <input id="branch" type="text" placeholder="Branch" class="w-full p-3 rounded bg-slate-700">
-
-        <!-- SEND OTP BUTTON -->
-        <button onclick="sendOtp()" class="w-full bg-indigo-600 py-3 rounded hover:bg-indigo-500">
-            Send OTP
-        </button>
-
-        <!-- OTP FIELD (Hidden initially) -->
-        <div id="otpSection" class="hidden space-y-3">
-            <input id="otp" type="text" placeholder="Enter OTP" class="w-full p-3 rounded bg-slate-700">
-
-            <button onclick="verifyOtp()" class="w-full bg-green-600 py-3 rounded hover:bg-green-500">
-                Verify & Signup
-            </button>
+    <div class="glass-card rounded-3xl p-8 w-full max-w-md">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">Join RB-Portal</h1>
+            <p class="text-slate-400">Create your account to access premium services</p>
         </div>
 
-        <!-- MESSAGE -->
-        <p id="message" class="text-sm text-center"></p>
+        <form id="signupForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+                <input type="text" id="name" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="John Doe">
+            </div>
 
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                <input type="email" id="email" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="you@example.com">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
+                <input type="tel" id="phone" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="9876543210">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Branch</label>
+                <select id="branch" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Select Branch</option>
+                    <option value="BCA">BCA</option>
+                    <option value="B.Sc IT">B.Sc IT</option>
+                    <option value="MCA">MCA</option>
+                    <option value="M.Sc CS">M.Sc CS</option>
+                    <option value="B.Pharm">B.Pharm</option>
+                    <option value="M.Pharm">M.Pharm</option>
+                    <option value="B.Sc Nursing">B.Sc Nursing</option>
+                    <option value="OT">OT</option>
+                    <option value="Radiology">Radiology</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                <input type="password" id="password" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="••••••••">
+            </div>
+
+            <button type="button" onclick="sendOtp()" id="sendOtpBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2">
+                <span id="btnText">Send OTP</span>
+            </button>
+        </form>
+
+        <div class="text-center mt-6">
+            <p class="text-slate-400">Already have an account? <a href="login.html" class="text-indigo-400 hover:text-indigo-300">Login</a></p>
+        </div>
     </div>
-</div>
 
-<script>
-    const API_BASE = "https://rb-studentport-backend-production.up.railway.app";
+    <!-- OTP MODAL -->
+    <div id="otpModal" class="hidden fixed inset-0 modal-overlay flex items-center justify-center p-4 z-50">
+        <div class="glass-card rounded-3xl p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-white mb-2">Verify OTP</h2>
+                <p class="text-slate-400">Enter the 6-digit OTP sent to <span id="phoneDisplay" class="text-indigo-400 font-semibold"></span></p>
+            </div>
 
-    function showMessage(msg, color="white"){
-        const el = document.getElementById("message");
-        el.innerText = msg;
-        el.style.color = color;
-    }
+            <div class="space-y-6">
+                <div class="flex gap-2 justify-center">
+                    <input type="text" id="otp1" class="otp-input bg-slate-800 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" maxlength="1" inputmode="numeric">
+                    <input type="text" id="otp2" class="otp-input bg-slate-800 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" maxlength="1" inputmode="numeric">
+                    <input type="text" id="otp3" class="otp-input bg-slate-800 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" maxlength="1" inputmode="numeric">
+                    <input type="text" id="otp4" class="otp-input bg-slate-800 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" maxlength="1" inputmode="numeric">
+                    <input type="text" id="otp5" class="otp-input bg-slate-800 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" maxlength="1" inputmode="numeric">
+                    <input type="text" id="otp6" class="otp-input bg-slate-800 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" maxlength="1" inputmode="numeric">
+                </div>
 
-    async function sendOtp() {
-        const phone = document.getElementById("phone").value;
+                <button type="button" onclick="verifyOtp()" id="verifyBtn" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-green-500/20 flex items-center justify-center gap-2">
+                    <span id="verifyBtnText">Verify & Signup</span>
+                </button>
 
-        const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ phoneNumber: phone })
-        });
+                <button type="button" onclick="resendOtp()" id="resendBtn" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-4 rounded-xl transition-all">
+                    Resend OTP
+                </button>
 
-        const data = await res.json();
+                <p id="otpMessage" class="text-sm text-center"></p>
+            </div>
+        </div>
+    </div>
 
-        if(data.success){
-            showMessage("OTP Sent ✔", "lightgreen");
-            document.getElementById("otpSection").classList.remove("hidden");
-        } else {
-            showMessage(data.message, "red");
+    <div id="toastContainer"></div>
+
+    <script>
+        const API_BASE = "https://rb-studentport-backend-production.up.railway.app";
+        const ZAVODEV_API_KEY = "zv_live_18bb1667ab3eb5aaab99a2d689370b696c56861431e78aed";
+
+        function showToast(message, type = 'error') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 3200);
         }
-    }
 
-    async function verifyOtp() {
-        const payload = {
-            name: document.getElementById("name").value,
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value,
-            phoneNumber: document.getElementById("phone").value,
-            branch: document.getElementById("branch").value,
-            otp: document.getElementById("otp").value
-        };
-
-        const res = await fetch(`${API_BASE}/api/auth/verify-otp`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-
-        if(data.success){
-            showMessage("Signup Successful 🎉", "lightgreen");
-            setTimeout(()=> window.location.href="login.html", 1500);
-        } else {
-            showMessage(data.message, "red");
+        function getApiBaseUrl() {
+            // Force production backend URL to avoid localhost connection errors
+            return 'https://rb-studentport-backend-production.up.railway.app';
         }
-    }
-</script>
+
+        async function sendOtp() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const branch = document.getElementById('branch').value;
+            const password = document.getElementById('password').value;
+
+            if (!name || !email || !phone || !branch || !password) {
+                showToast('Please fill all fields', 'error');
+                return;
+            }
+
+            if (!/^[6-9]\d{9}$/.test(phone)) {
+                showToast('Please enter a valid 10-digit phone number', 'error');
+                return;
+            }
+
+            const sendOtpBtn = document.getElementById('sendOtpBtn');
+            sendOtpBtn.disabled = true;
+            const btnText = document.getElementById('btnText');
+            btnText.innerHTML = '<div class="spinner"></div> Sending...';
+
+            try {
+                const apiUrl = getApiBaseUrl();
+                console.log('[OTP] Sending request to:', `${apiUrl}/api/auth/send-otp`);
+
+                const res = await fetch(`${apiUrl}/api/auth/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phoneNumber: phone })
+                });
+
+                console.log('[OTP] Response status:', res.status);
+
+                const data = await res.json();
+                console.log('[OTP] Response data:', data);
+
+                if (data.success) {
+                    showToast('OTP sent successfully to ' + phone, 'success');
+                    document.getElementById('phoneDisplay').textContent = phone;
+                    document.getElementById('otpModal').classList.remove('hidden');
+                    setupOtpInputs();
+                } else {
+                    showToast(data.message || 'Failed to send OTP', 'error');
+                }
+            } catch (error) {
+                console.error('[OTP] Error:', error);
+                showToast('Error sending OTP: ' + error.message, 'error');
+            } finally {
+                sendOtpBtn.disabled = false;
+                btnText.textContent = 'Send OTP';
+            }
+        }
+
+        function setupOtpInputs() {
+            const inputs = ['otp1', 'otp2', 'otp3', 'otp4', 'otp5', 'otp6'];
+            inputs.forEach((id, index) => {
+                document.getElementById(id).addEventListener('keyup', (e) => {
+                    if (e.target.value && index < inputs.length - 1) {
+                        document.getElementById(inputs[index + 1]).focus();
+                    }
+                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        document.getElementById(inputs[index - 1]).focus();
+                    }
+                });
+                document.getElementById(id).addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pastedData = e.clipboardData.getData('text').slice(0, 6 - index);
+                    pastedData.split('').forEach((char, i) => {
+                        if (index + i < inputs.length) {
+                            document.getElementById(inputs[index + i]).value = char;
+                        }
+                    });
+                    if (index + pastedData.length < inputs.length) {
+                        document.getElementById(inputs[Math.min(index + pastedData.length, inputs.length - 1)]).focus();
+                    }
+                });
+            });
+        }
+
+        async function verifyOtp() {
+            const otp = ['otp1', 'otp2', 'otp3', 'otp4', 'otp5', 'otp6']
+                .map(id => document.getElementById(id).value)
+                .join('');
+
+            if (otp.length !== 6) {
+                showToast('Please enter all 6 digits', 'error');
+                return;
+            }
+
+            const verifyBtn = document.getElementById('verifyBtn');
+            verifyBtn.disabled = true;
+            const verifyBtnText = document.getElementById('verifyBtnText');
+            verifyBtnText.innerHTML = '<div class="spinner"></div> Verifying...';
+
+            try {
+                const payload = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    phoneNumber: document.getElementById('phone').value,
+                    branch: document.getElementById('branch').value,
+                    otp: otp
+                };
+
+                const apiUrl = getApiBaseUrl();
+                const res = await fetch(`${apiUrl}/api/auth/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    showToast('Signup successful! Redirecting to login...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showToast(data.message || 'Invalid OTP', 'error');
+                }
+            } catch (error) {
+                console.error('[OTP] Verify Error:', error);
+                showToast('Error verifying OTP: ' + error.message, 'error');
+            } finally {
+                verifyBtn.disabled = false;
+                verifyBtnText.textContent = 'Verify & Signup';
+            }
+        }
+
+        async function resendOtp() {
+            const phone = document.getElementById('phone').value.trim();
+            const resendBtn = document.getElementById('resendBtn');
+            resendBtn.disabled = true;
+            const originalText = resendBtn.textContent;
+            resendBtn.textContent = 'Resending...';
+
+            try {
+                const apiUrl = getApiBaseUrl();
+                const res = await fetch(`${apiUrl}/api/auth/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phoneNumber: phone })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    showToast('OTP resent successfully', 'success');
+                    // Clear OTP inputs
+                    ['otp1', 'otp2', 'otp3', 'otp4', 'otp5', 'otp6'].forEach(id => {
+                        document.getElementById(id).value = '';
+                    });
+                    document.getElementById('otp1').focus();
+                } else {
+                    showToast(data.message || 'Failed to resend OTP', 'error');
+                }
+            } catch (error) {
+                console.error('[OTP] Resend Error:', error);
+                showToast('Error resending OTP: ' + error.message, 'error');
+            } finally {
+                resendBtn.disabled = false;
+                resendBtn.textContent = originalText;
+            }
+        }
+
+        // Auto-focus first OTP input when modal opens
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('signupForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+            });
+        });
+    </script>
 
 </body>
 </html>
