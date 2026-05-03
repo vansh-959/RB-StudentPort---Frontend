@@ -126,11 +126,23 @@
   </main>
 
   <script>
+    function getApiBaseUrl() {
+      const host = window.location.hostname;
+      const protocol = window.location.protocol;
+      if (!host || host === 'localhost' || host === '127.0.0.1' || protocol === 'file:') {
+        return 'http://localhost:8080';
+      }
+      return 'https://rb-studentport-backend-production.up.railway.app';
+    }
+
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    fetch(`https://rb-studentport-backend-production.up.railway.app/api/pyqs/${id}`)
-      .then(res => res.json())
+    fetch(`${getApiBaseUrl()}/api/pyqs/${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error("Server response was not ok");
+        return res.json();
+      })
       .then(data => {
         document.getElementById("loader").classList.add("hidden");
         document.getElementById("content").classList.remove("hidden");
@@ -142,7 +154,7 @@
         document.getElementById("year").innerText = data.year;
 
         const pdfLink = document.createElement("a");
-        pdfLink.href = "https://rb-studentport-backend-production.up.railway.app/uploads/pyqs/" + data.fileName;
+        pdfLink.href = `${getApiBaseUrl()}/uploads/pyqs/${data.fileName}`;
         pdfLink.target = "_blank";
         pdfLink.className = "w-full flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 px-6 rounded-2xl shadow-xl shadow-indigo-600/20 transition-all transform hover:-translate-y-1 active:scale-95 uppercase text-sm tracking-widest";
         pdfLink.innerHTML = `
@@ -152,17 +164,20 @@
           Access Full Document
         `;
 
+        document.getElementById("actionArea").innerHTML = "";
         document.getElementById("actionArea").appendChild(pdfLink);
       })
       .catch(error => {
+        console.error("Fetch error:", error);
         document.getElementById("loader").innerHTML = `
           <div class="text-center">
             <p class="text-red-400 font-black uppercase text-xs tracking-widest">Connection Error</p>
             <p class="text-slate-500 mt-2 text-sm">Could not reach the server.</p>
+            <button onclick="location.reload()" class="mt-4 text-indigo-400 text-xs underline">Try Again</button>
           </div>
         `;
       });
-  </script>
+</script>
 
 </body>
 </html>

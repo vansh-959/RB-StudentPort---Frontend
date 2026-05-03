@@ -153,7 +153,8 @@
     <script>
     function getApiBaseUrl() {
         const host = window.location.hostname;
-        if (host === 'localhost' || host === '127.0.0.1') {
+        const protocol = window.location.protocol;
+        if (!host || host === 'localhost' || host === '127.0.0.1' || protocol === 'file:') {
             return 'http://localhost:8080';
         }
         return 'https://rb-studentport-backend-production.up.railway.app';

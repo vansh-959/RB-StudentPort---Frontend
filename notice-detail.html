@@ -118,6 +118,15 @@
   </main>
 
   <script>
+    function getApiBaseUrl() {
+      const host = window.location.hostname;
+      const protocol = window.location.protocol;
+      if (!host || host === 'localhost' || host === '127.0.0.1' || protocol === 'file:') {
+        return 'http://localhost:8080';
+      }
+      return 'https://rb-studentport-backend-production.up.railway.app';
+    }
+
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
@@ -129,7 +138,7 @@
     const realContent = document.getElementById("realContent");
     const pdfContainer = document.getElementById("pdfContainer");
 
-    fetch(`https://rb-studentport-backend-production.up.railway.app/api/notices/${id}`)
+    fetch(`${getApiBaseUrl()}/api/notices/${id}`)
       .then(res => {
         if (!res.ok) throw new Error("Notice not found");
         return res.json();
@@ -139,7 +148,7 @@
         dateText.innerText = data.publicationDate;
         
         const pdfLink = document.createElement("a");
-        pdfLink.href = "https://rb-studentport-backend-production.up.railway.app/uploads/" + data.pdfPath;
+        pdfLink.href = `${getApiBaseUrl()}/uploads/${data.pdfPath}`;
         pdfLink.target = "_blank";
         pdfLink.innerHTML = `
             <i class="fas fa-file-pdf text-xl"></i>

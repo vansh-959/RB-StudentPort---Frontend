@@ -146,10 +146,19 @@
   </footer>
 
   <script>
+    function getApiBaseUrl() {
+      const host = window.location.hostname;
+      const protocol = window.location.protocol;
+      if (!host || host === 'localhost' || host === '127.0.0.1' || protocol === 'file:') {
+        return 'http://localhost:8080';
+      }
+      return 'https://rb-studentport-backend-production.up.railway.app';
+    }
+
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    fetch(`https://rb-studentport-backend-production.up.railway.app/api/events/${id}`)
+    fetch(`${getApiBaseUrl()}/api/events/${id}`)
       .then(res => res.json())
       .then(data => {
         document.getElementById("loader").classList.add("hidden");
@@ -163,7 +172,7 @@
 
         if (data.filePath) {
           const fileLink = document.createElement("a");
-          fileLink.href = "https://rb-studentport-backend-production.up.railway.app/uploads/" + data.filePath;
+          fileLink.href = `${getApiBaseUrl()}/uploads/${data.filePath}`;
           fileLink.target = "_blank";
           fileLink.className = "flex items-center justify-between w-full px-8 py-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.5rem] transition-all duration-300 group shadow-xl shadow-indigo-900/20";
           fileLink.innerHTML = `

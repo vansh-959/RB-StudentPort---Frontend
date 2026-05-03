@@ -192,7 +192,16 @@
             });
         }
 
-        fetch("https://rb-studentport-backend-production.up.railway.app/api/events")
+        function getApiBaseUrl() {
+            const host = window.location.hostname;
+            const protocol = window.location.protocol;
+            if (!host || host === 'localhost' || host === '127.0.0.1' || protocol === 'file:') {
+                return 'http://localhost:8080';
+            }
+            return 'https://rb-studentport-backend-production.up.railway.app';
+        }
+
+        fetch(`${getApiBaseUrl()}/api/events`)
             .then(res => res.json())
             .then(data => renderEvents(data))
             .catch(err => console.error("Error:", err));

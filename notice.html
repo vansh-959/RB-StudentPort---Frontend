@@ -110,7 +110,16 @@
             }, 900);
         }
 
-        fetch("https://rb-studentport-backend-production.up.railway.app/api/notices")
+        function getApiBaseUrl() {
+            const host = window.location.hostname;
+            const protocol = window.location.protocol;
+            if (!host || host === 'localhost' || host === '127.0.0.1' || protocol === 'file:') {
+                return 'http://localhost:8080';
+            }
+            return 'https://rb-studentport-backend-production.up.railway.app';
+        }
+
+        fetch(`${getApiBaseUrl()}/api/notices`)
             .then(response => response.json())
             .then(data => {
                 const noticeList = document.getElementById("noticeList");
